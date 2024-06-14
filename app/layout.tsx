@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Open_Sans as FontSans } from "next/font/google";
 import "./globals.css";
 import {cn} from "@/lib/utils";
+import Navigation from "@/components/ui/Navigation";
 
 const fontSans = FontSans({ subsets: ["latin"],variable:"--font-sans" });
 
@@ -17,7 +18,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn("min-h-screen bg-background font-sans antialiased",fontSans.variable)}>{children}</body>
+      <body className={cn("min-h-screen bg-background font-sans antialiased",fontSans.variable)}>
+      <Navigation />
+      {children}
+      </body>
     </html>
   );
 }
