@@ -62,16 +62,20 @@ export default function Navigation() {
                     <NavigationMenu>
                         <NavigationMenuList>
                             <NavigationMenuItem>
-                                <NavigationMenuLink href="/sign-in"><UserRound/></NavigationMenuLink>
+                                <NavigationMenuLink
+                                    className="p-2 flex items-center justify-center rounded-full  hover:bg-secondary  "
+                                    href="/sign-in"><UserRound/></NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <NavigationMenuLink href="/"><ShoppingCart/></NavigationMenuLink>
+                                <NavigationMenuLink className="p-2 flex items-center justify-center rounded-full  hover:bg-secondary  " href="/"><ShoppingCart/></NavigationMenuLink>
+                                <span
+                                    className=" text-white absolute top-0 right-0 bg-red-500 rounded-full p-1 text-[11px] flex items-center justify-center h-4 w-4">0</span>
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
                 <div className="lg:hidden">
-                    <Sheet>
+                <Sheet>
                         <SheetTrigger asChild>
                             <Button variant={"outline"} size="icon">
                                 <Menu/>
