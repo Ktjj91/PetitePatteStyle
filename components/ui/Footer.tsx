@@ -6,7 +6,7 @@
     export default function Footer() {
         return (
             <footer className="mt-auto h-48 w-full bg-red-500 bg-secondary flex justify-between">
-                <section className=" order-last md:order-none flex m-2 flex-col items-center justify-center">
+                <section className=" order-last md:order-none flex m-2 flex-col items-center justify-center ">
                     <div>
                         <Link href="/">
                             <Image width={100} src={Logo} alt="logo"/>
