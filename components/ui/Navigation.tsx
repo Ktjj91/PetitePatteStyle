@@ -15,7 +15,7 @@ import {Collapsible, CollapsibleTrigger,CollapsibleContent} from "@/components/u
 export default function Navigation() {
     return (
         <header className="flex h-16 justify-between  items-center px-4 md:px-6 bg-white dark:bg-gray-950 border-b border-gray-200 dark:border-gray-800">
-            <div >
+            <div>
                 <Link href="/" prefetch={false}>
                     <Image  priority width={100} src={Logo} alt="logo"/>
                 </Link>
@@ -67,9 +67,15 @@ export default function Navigation() {
                                     href="/sign-in"><UserRound/></NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
-                                <NavigationMenuLink className="p-2 flex items-center justify-center rounded-full  hover:bg-secondary  " href="/"><ShoppingCart/></NavigationMenuLink>
-                                <span
-                                    className=" text-white absolute top-0 right-0 bg-red-500 rounded-full p-1 text-[11px] flex items-center justify-center h-4 w-4">0</span>
+                                <Sheet>
+                                    <SheetTrigger>
+                                        <span className="p-2 flex items-center justify-center rounded-full  hover:bg-secondary"><ShoppingCart/></span>
+                                        <span className=" text-white absolute top-0 right-0 bg-red-500 rounded-full p-1 text-[11px] flex items-center justify-center h-4 w-4">0</span>
+                                    </SheetTrigger>
+                                    <SheetContent side="right">
+
+                                    </SheetContent>
+                                </Sheet>
                             </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>

@@ -6,12 +6,12 @@ import {Button} from "@/components/ui/button";
 
 export default function ProductDetails() {
     return (
-        <div className="container mt-5 place-content-center place-items-center grid grid-cols-2">
+        <div className="container grid my-5 place-content-center place-items-center lg:grid-cols-2 max-w-7xl  sm:grid-cols-1 md:grid-cols-1">
             <div className="flex justify-center items-center">
                 <Image width="400" src={chien} alt="chien" />
             </div>
             <div className="flex flex-col justify-center items-start">
-                <h2 className=" text-4xl font-bold">Product Name</h2>
+                <h2 className=" text-4xl font-bold self-center mt-3">Product Name</h2>
                 <div className="mt-5 w-full">
                     <span className="font-bold ">28,95 EUR</span>
                 </div>
