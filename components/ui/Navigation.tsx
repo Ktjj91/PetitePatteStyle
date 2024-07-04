@@ -50,7 +50,7 @@ export default function Navigation() {
                             </NavigationMenuContent>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
-                            <Link  className="hover:bg-gray-300 " legacyBehavior passHref href="/">
+                            <Link  className="hover:bg-gray-300 " legacyBehavior passHref href="/histoire">
                                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>Notre Histoire</NavigationMenuLink>
                             </Link>
                         </NavigationMenuItem>
@@ -126,7 +126,7 @@ export default function Navigation() {
                             </Collapsible>
                             <Collapsible className="grid gap-2 mt-2">
                                 <CollapsibleTrigger className="hover:bg-secondary px-3 py-2 rounded ">
-                                    <Link className="hover:bg-secondary rounded px-3 py-2" href="/">Notre
+                                    <Link className="hover:bg-secondary rounded px-3 py-2" href="histoire">Notre
                                         histoire</Link>
                                 </CollapsibleTrigger>
                             </Collapsible>
