@@ -1,9 +1,11 @@
 import Galerie from "@/components/ui/Galerie";
+import Header from "@/components/ui/Header";
 
 export default function Home() {
   return (
-  <div className="flex-grow">
+  <main className="flex-grow">
+   <Header />
     <Galerie />
-  </div>
+  </main>
   );
 }
