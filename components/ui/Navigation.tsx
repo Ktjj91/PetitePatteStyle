@@ -27,10 +27,10 @@ export default function Navigation() {
                             <NavigationMenuTrigger>Vêtements</NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <div className="grid p-2">
-                                    <Link className="hover:bg-gray-300" legacyBehavior passHref href="/">
+                                    <Link className="hover:bg-gray-300" legacyBehavior passHref href="/pull">
                                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>Pull</NavigationMenuLink>
                                     </Link>
-                                    <Link className="hover:bg-gray-300" legacyBehavior passHref href="/">
+                                    <Link className="hover:bg-gray-300" legacyBehavior passHref href="/tshirt">
                                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>T-shirt</NavigationMenuLink>
                                     </Link>
                                 </div>
@@ -40,10 +40,10 @@ export default function Navigation() {
                             <NavigationMenuTrigger>Accessoires</NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <div className="grid p-2">
-                                    <Link  className="hover:bg-gray-300 " legacyBehavior passHref href="/">
+                                    <Link  className="hover:bg-gray-300 " legacyBehavior passHref href="/collier">
                                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>Collier</NavigationMenuLink>
                                     </Link>
-                                    <Link className="hover:bg-gray-300" legacyBehavior passHref href="/">
+                                    <Link className="hover:bg-gray-300" legacyBehavior passHref href="/harnais">
                                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>Harnais</NavigationMenuLink>
                                     </Link>
                                 </div>

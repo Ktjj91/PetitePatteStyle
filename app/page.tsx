@@ -3,6 +3,7 @@ import Galerie from "@/components/ui/Galerie";
 import Header from "@/components/ui/Header";
 import {useEffect, useState} from "react";
 import {useProductStore} from "@/app/store";
+import Collection from "@/components/ui/Collection";
 
 export default function Home() {
     const setProducts = useProductStore.use.setProducts();
@@ -21,6 +22,7 @@ export default function Home() {
   return (
   <main className="flex-grow">
    <Header />
+      <Collection />
     <Galerie />
   </main>
   );
