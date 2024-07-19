@@ -5,6 +5,8 @@ import {Separator} from "@/components/ui/separator";
 import GoogleLogo from "@/public/google.png"
 import Image from "next/image";
 import Link from "next/link"
+import {redirect} from "next/navigation";
+
 export function SignIn() {
     return (
         <div className="container mt-5 flex flex-col items-center justify-center space-y-4">
@@ -28,11 +30,20 @@ export function SignIn() {
                 <p>Ou</p>
                 <Separator className="w-40"/>
             </section>
-            <Button variant="outline">
-                <Image className="mr-3" width={20} src={GoogleLogo} alt="Google logo"/>
-                Continuer avec Google
-            </Button>
-            <p className="text-center text-[12px]">En continuant, vous acceptez notre <Link className="hover:underline text-[#2D68A6]" href="/">Politique de confidentialité & cookies</Link> et <Link className="hover:underline text-[#2D68A6]" href="/">Conditions Générales.</Link></p>
+            <form action={async () => {
+                "use server"
+                await signIn("google",redirect("/"))
+            }} className="flex  justify-center items-center flex-col">
+                <Button type="submit" variant="outline">
+                    <Image className="mr-3" width={20} src={GoogleLogo} alt="Google logo"/>
+                    Continuer avec Google
+                </Button>
+                <p className="text-center text-[12px]">En continuant, vous acceptez notre <Link
+                    className="hover:underline text-[#2D68A6]" href="/">Politique de confidentialité &
+                    cookies</Link> et <Link className="hover:underline text-[#2D68A6]" href="/">Conditions
+                    Générales.</Link></p>
+            </form>
+
         </div>
 
 

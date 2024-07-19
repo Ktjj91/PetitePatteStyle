@@ -4,6 +4,7 @@ import Header from "@/components/ui/Header";
 import {useEffect, useState} from "react";
 import {useProductStore} from "@/app/store";
 import Collection from "@/components/ui/Collection";
+import {SignOut} from "@/components/ui/SignOut";
 
 export default function Home() {
     const setProducts = useProductStore.use.setProducts();

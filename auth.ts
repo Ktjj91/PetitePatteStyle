@@ -1,9 +1,9 @@
 import NextAuth,{ type DefaultSession }  from "next-auth"
 import Google from "@auth/core/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { PrismaClient } from "@prisma/client"
+import {prisma} from "@/db/db";
 
-const prisma = PrismaClient;
+
 
 
 declare module "next-auth" {
@@ -26,15 +26,15 @@ declare module "next-auth" {
 export const { handlers, signIn, signOut, auth } = NextAuth({
     adapter: PrismaAdapter(prisma),
     providers: [Google({
-        profile(profile) :any{
-            return {role: profile.role ?? "USER"}
+        profile(profile) {
+            return {role: profile.role ?? "USER",email:profile.email}
         }
     })],
-    callbacks: {
-        session({ session   , token }) {
-            session.user.role = token.role
-            return session
-        },
-    }
+    // callbacks: {
+    //     session({ session   , token }) {
+    //         session.user.role = token.role
+    //         return session
+    //     },
+    // }
 })
 

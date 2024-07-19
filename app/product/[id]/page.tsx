@@ -5,6 +5,9 @@ import Image from "next/image";
 import chien from "@/public/Image.png";
 import {Minus, Plus} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
 
 
 export default function Page({ params }: { params: { id: string } }) {
@@ -16,41 +19,42 @@ export default function Page({ params }: { params: { id: string } }) {
         if(!response.ok){
             throw new Error('Product not found');
         }
-        const data = await  response.json();
-        setProduct(data);
+        const {product} = await  response.json();
+        setProduct(product);
     }
     useEffect(() => {
         fetchDataProduct();
     }, []);
 
+
     return (
         <div className="container grid my-5 place-content-center place-items-center lg:grid-cols-2 max-w-7xl  sm:grid-cols-1 md:grid-cols-1">
             <div className="flex justify-center items-center">
-                <Image width="400" src={chien} alt="chien" />
+                <Image width={400} height={400} src={product.image} alt="chien" />
             </div>
             <div className="flex flex-col justify-center items-start">
-                <h2 className=" text-4xl font-bold self-center mt-3">Product Name</h2>
+                <h2 className=" text-4xl font-bold self-center mt-3">{product.name}</h2>
                 <div className="mt-5 w-full">
-                    <span className="font-bold ">28,95 EUR</span>
+                    <span className="font-bold ">{product.price}€</span>
                 </div>
                 <div className="mt-3">
-                    <span className="text-sm">Taille : </span>
-                    <ul className="flex gap-2 my-3">
-                        <li className="cursor-pointer border min-w-[32px]  text-center ">S</li>
-                        <li className="cursor-pointer border min-w-[32px]  text-center ">M</li>
-                        <li className="cursor-pointer border min-w-[32px]  text-center ">L</li>
-                        <li className="cursor-pointer border min-w-[32px]  text-center">XL</li>
-                    </ul>
-                    <span className="text-sm ">Quantité:</span>
-                    <div className="border flex justify-center space-x-3 mt-3 p-2">
-                        <button className="hover:text-[#666]"><Minus/></button>
-                        {/*Mettre un Input */}
-                        <span>1</span>
-                        <button className="hover:text-[#666]"><Plus/></button>
-                    </div>
+                    <Label htmlFor='taille' className="text-sm">Taille : </Label>
+                    <Select  >
+                        <SelectTrigger  className="mt-3 mb-3 w-[180px]">
+                            <SelectValue placeholder="Choissiez une Taille"></SelectValue>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="s">S</SelectItem>
+                            <SelectItem value="m">M</SelectItem>
+                            <SelectItem value="l">L</SelectItem>
+                            <SelectItem value="xl">XL</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <Label htmlFor="quantite" >Quantité : </Label>
+                    <Input id="quantite" name="quantite"className="mt-3" type="number" />
                 </div>
                 <div className="mt-3">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis commodi distinctio doloribus expedita nihil quaerat quas quod! Enim quos ut voluptatum? Aperiam assumenda eaque laboriosam laudantium officiis recusandae tempora voluptate.</p>
+                    <p>{product.description}</p>
                 </div>
                 <Button className="w-full mt-5" variant="defaultBlack">Ajouter au panier </Button>
             </div>
