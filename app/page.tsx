@@ -4,10 +4,9 @@ import Header from "@/components/ui/Header";
 import {useEffect} from "react";
 import {useProductStore} from "@/app/store";
 import Collection from "@/components/ui/Collection";
-import {SignOut} from "@/components/ui/SignOut";
 
 export default function Home() {
-    const setProducts = useProductStore.use.setProducts();
+    const setProducts =  useProductStore.use.setProducts();
     const fetchData = async () => {
          const response = await fetch("/api/products");
              if (!response.ok) {
