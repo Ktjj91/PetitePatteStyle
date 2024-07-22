@@ -1,7 +1,7 @@
 "use client"
 import Galerie from "@/components/ui/Galerie";
 import Header from "@/components/ui/Header";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useProductStore} from "@/app/store";
 import Collection from "@/components/ui/Collection";
 import {SignOut} from "@/components/ui/SignOut";
@@ -9,7 +9,7 @@ import {SignOut} from "@/components/ui/SignOut";
 export default function Home() {
     const setProducts = useProductStore.use.setProducts();
     const fetchData = async () => {
-         const response = await  fetch("/api/products");
+         const response = await fetch("/api/products");
              if (!response.ok) {
                  throw new Error('Failed to fetch data')
              }

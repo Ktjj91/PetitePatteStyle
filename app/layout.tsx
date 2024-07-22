@@ -4,8 +4,6 @@ import "./globals.css";
 import {cn} from "@/lib/utils";
 import Navigation from "@/components/ui/Navigation";
 import Footer from "@/components/ui/Footer";
-import {SessionProvider} from "next-auth/react";
-import {getServerSideProps} from "@/app/action/getServerSideprops";
 import {auth} from "@/auth";
 
 const fontSans = FontSans({subsets: ["latin"], variable: "--font-sans"});
@@ -21,15 +19,15 @@ export default async function RootLayout({ children}: Readonly<{
     children: React.ReactNode,
 }>) {
 
+    const session = await auth();
 
     return (
             <html lang="en">
-            <body className={cn(" flex flex-col min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
-                <Navigation/>
+            <body className={cn("flex flex-col min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
+            <Navigation session={session} />
             {children}
             <Footer/>
             </body>
-
             </html>
     );
 }

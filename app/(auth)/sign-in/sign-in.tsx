@@ -30,9 +30,10 @@ export function SignIn() {
                 <p>Ou</p>
                 <Separator className="w-40"/>
             </section>
+
             <form action={async () => {
                 "use server"
-                await signIn("google",redirect("/"))
+                await signIn("google",{redirectTo:"/dashboard/settings"})
             }} className="flex  justify-center items-center flex-col">
                 <Button type="submit" variant="outline">
                     <Image className="mr-3" width={20} src={GoogleLogo} alt="Google logo"/>

@@ -16,11 +16,10 @@ import {Sheet, SheetClose, SheetContent, SheetTrigger} from "@/components/ui/she
 import {Button} from "@/components/ui/button";
 import {Collapsible, CollapsibleTrigger, CollapsibleContent} from "@/components/ui/collapsible";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
-import {signOut} from "@/auth";
 import {SignOut} from "@/components/ui/SignOut";
+import {signOut} from "@/auth";
 
-export default  function Navigation() {
-
+export default  function Navigation({session} :any) {
 
     return (
         <header
@@ -77,23 +76,30 @@ export default  function Navigation() {
                 <div>
                     <NavigationMenu>
                         <NavigationMenuList>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger>Open</DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuItem>
-                                        <Link className="bloc w-full" href="/dashboard/settings">Profile</Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <SignOut />
-                                    </DropdownMenuItem>
+                            {
+                                !session?.user ?
+                                    <NavigationMenuItem>
+                                        <NavigationMenuLink
+                                            className="p-2 flex items-center justify-center rounded-full hover:bg-secondary"
+                                            href="/sign-in"><UserRound/></NavigationMenuLink>
+                                    </NavigationMenuItem> :
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger><UserRound/></DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuItem>
+                                                <Link className="bloc w-full" href="/dashboard/settings">Profile</Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                                <Link className="bloc w-full" href="/dashboard/admin">Administration</Link>
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem>
+                                             <SignOut />
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
 
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    className="p-2 flex items-center justify-center rounded-full  hover:bg-secondary  "
-                                    href="/sign-in"><UserRound/></NavigationMenuLink>
-                            </NavigationMenuItem>
+                            }
+
                             <NavigationMenuItem>
                                 <Sheet>
                                     <SheetTrigger>
