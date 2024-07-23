@@ -2,9 +2,14 @@
 import {useProductStore} from "@/app/store";
 import {useEffect} from "react";
 import Image from "next/image";
-import { X } from 'lucide-react';
+import { X,Pencil} from 'lucide-react';
 import {Button} from "@/components/ui/button";
 import deleteProductAction from '@/app/action/deleteProductAction'
+import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
+import {Textarea} from "@/components/ui/textarea";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 export default function AdminPage() {
 
@@ -24,29 +29,21 @@ export default function AdminPage() {
         fetchData();
     }, []);
 
-    // const handleDelete = async (id) => {
-    //     try {
-    //         // Mise à jour optimiste (supprimer de l'interface utilisateur) :
-    //         setProducts(products.filter((product) => product.id !== id));
-    //
-    //         // Suppression côté serveur :
-    //         await deleteProductAction(id);
-    //
-    //         // Gérer la suppression réussie (facultatif) :
-    //         console.log("Produit supprimé avec succès");
-    //     } catch (error) {
-    //         // Annuler la mise à jour optimiste et afficher l'erreur :
-    //         setProducts(products.concat(products.find((product) => product.id === id)));
-    //         console.error("Échec de la suppression du produit :", error);
-    //     }
-    // };
+    const handleDelete = async (id:number) => {
+        try {
+            setProducts(products.filter((product) => product.id !== id));
+            await deleteProductAction(id);
 
-    // <Button onClick={() => handleDelete(product.id)} variant="red">
+        } catch (error) {
+            console.error("Échec de la suppression du produit :", error);
+        }
+    };
+
 
     return (
-        <section className="p-3">
+        <section className="p-3 flex flex-col justify-center items-center">
             <h1 className="text-center text-4xl">Produits</h1>
-            <table className="w-full mt-3 text-center">
+            <table className="  mt-3  max-w-[1000px] w-full table-auto  text-center border border-gray-200  border-collapse border-spacing-1.5">
                 <thead>
                 <tr>
                     <th>Nom</th>
@@ -58,9 +55,9 @@ export default function AdminPage() {
                     <th>Action</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody >
                 {products.map((product) => (
-                    <tr key={product.id}>
+                    <tr key={product.id} className="border border-gray-200">
                         <td>{product.name}</td>
                         <td className="text-sm max-w-[200px]">{product.description}</td>
                         <td>{product.price}€</td>
@@ -70,9 +67,49 @@ export default function AdminPage() {
                         <td>{product.quantity}</td>
                         <td>{product.categoriesId}</td>
                         <td>
-                            <form >
-                                <Button formAction={() => deleteProductAction(product.id)} variant="red"><X/></Button>
-                            </form>
+                            <div className="flex items-center justify-center gap-2">
+                                <Dialog>
+                                    <DialogTrigger>
+                                        <Button variant="orange"><Pencil/></Button>
+                                    </DialogTrigger>
+                                    <DialogContent >
+                                        <DialogHeader>
+                                            <DialogTitle>Modifier le produit</DialogTitle>
+                                        </DialogHeader>
+                                        <form action="">
+                                            <Label htmlFor="name">Nom</Label>
+                                            <Input name="name" id="name" type="text" />
+                                            <Label htmlFor="description">Description</Label>
+                                            <Textarea id="description" name="description" />
+                                            <Label htmlFor="price">Prix</Label>
+                                            <Input type="number" name="price" id="price" />
+                                            <Label htmlFor="quantity">Prix</Label>
+                                            <Input type="number" name="quantity" id="quantity" />
+                                            <Label htmlFor="image">Image</Label>
+                                            <Input id="image" name="image" type="file" />
+                                            <Label htmlFor='categorie' className="text-sm">Categorie</Label>
+                                            <Select name="categorie" >
+                                                <SelectTrigger  id="categorie"  className="mt-3 mb-3 w-full">
+                                                    <SelectValue placeholder="Choisisez une catéforie"></SelectValue>
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="1">Pull</SelectItem>
+                                                    <SelectItem value="2">T-shirt</SelectItem>
+                                                    <SelectItem value="3">Harnais</SelectItem>
+                                                    <SelectItem value="4">Collier</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <div className=" mt-3 w-full flex justify-center">
+                                                <Button type="submit" variant="orange">Modifier</Button>
+                                            </div>
+                                        </form>
+                                    </DialogContent>
+                                </Dialog>
+                                <form className="flex items-center justify-center flex-col">
+                                    <Button onClick={() => handleDelete(product.id)} variant="red"><X/></Button>
+                                </form>
+                            </div>
+
                         </td>
                     </tr>
                 ))}
