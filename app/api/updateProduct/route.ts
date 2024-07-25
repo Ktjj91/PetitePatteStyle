@@ -23,7 +23,6 @@ export async function PUT(request: Request) {
         const fullPath = join(process.cwd(), "public", imagePath);
 
         await writeFile(fullPath, buffer)
-
         const updateProduct = await prisma.products.update({
             where: {id: id},
             data: {
