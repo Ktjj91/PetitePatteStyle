@@ -7,10 +7,9 @@ export async function DELETE(request: Request,{params}:{params:{id:string}}) {
          await prisma.products.delete({
             where:{id:id}
         })
-        return NextResponse.json({status:200});
+        return NextResponse.json({message:"Delete success !"},{status:200});
     } catch (error) {
-        console.error("La supression a échouer",error)
-        return NextResponse.redirect(new URL('/', request.url))
+        return NextResponse.json({message:error},{status:500});
     }
 
 }

@@ -1,7 +1,8 @@
 "use server"
 
 export default async function deleteProductAction(id:number) {
-    await fetch(`http://localhost:3000/api/deleteProduct/${id}`,{
+    const parseId = String(id)
+    await fetch(`api/deleteProduct/${parseId}`,{
         method:"DELETE",
     })
 

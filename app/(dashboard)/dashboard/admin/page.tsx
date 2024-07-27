@@ -109,7 +109,9 @@ export default function AdminPage() {
     const handleDelete = async (id: number) => {
         try {
             setProducts(products.filter((product) => product.id !== id));
-            await deleteProductAction(id);
+            await fetch(`/api/deleteProduct/${id}`,{
+                method:"DELETE"
+            })
 
         } catch (error) {
             console.error("Échec de la suppression du produit :", error);
