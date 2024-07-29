@@ -3,8 +3,6 @@ import {useProductStore} from "@/app/store";
 import {useEffect, useState} from "react";
 import Image from "next/image";
 import {X, Pencil, BadgePlus} from 'lucide-react';
-import {Button} from "@/components/ui/button";
-import deleteProductAction from '@/app/action/deleteProductAction'
 import {
     Dialog,
     DialogContent,
@@ -19,6 +17,7 @@ import {Input} from "@/components/ui/input";
 import {Textarea} from "@/components/ui/textarea";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {TooltipProvider, Tooltip, TooltipTrigger, TooltipContent} from "@radix-ui/react-tooltip";
+import {Button} from "@/components/ui/button";
 
 interface Categories {
     [key: number]: string;
@@ -27,12 +26,10 @@ interface Categories {
 export default function AdminPage() {
     const setProducts = useProductStore.use.setProducts();
     const products = useProductStore.use.products();
-    const categories: Categories = {
-        1: "Pull",
-        2: "T-shirt",
-        3: "Collier",
-        4: "Harnais"
-    }
+    const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+    const [hasPrevPage, setHasPrevPage] = useState<boolean>(false);
+    const [cursor, setCursor] = useState<null | number>(null);
+    const pageSize = 10;
     const [formData, setFormData] = useState({
         id: "",
         name: '',
@@ -43,6 +40,13 @@ export default function AdminPage() {
         categorie: '',
     });
 
+    const categories: Categories = {
+        1: "Pull",
+        2: "T-shirt",
+        3: "Collier",
+        4: "Harnais"
+    }
+
     const handleChange = (e: any) => {
         const {name, value, files} = e.target;
         if (name === 'image') {
@@ -52,9 +56,9 @@ export default function AdminPage() {
         }
     };
     const handleSelectChange = (value: string) => {
-        setFormData((prevData) => ({ ...prevData, categorie: value }));
+        setFormData((prevData) => ({...prevData, categorie: value}));
     };
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>,route: "UPDATE" | "CREATE") => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, route: "UPDATE" | "CREATE") => {
         e.preventDefault();
         const data = new FormData();
         data.append('id', formData.id);
@@ -66,7 +70,7 @@ export default function AdminPage() {
         if (formData.image) {
             data.append('image', formData.image);
         }
-        if(route === "UPDATE"){
+        if (route === "UPDATE") {
             const response = await fetch("/api/updateProduct", {
                 method: 'PUT',
                 body: data,
@@ -93,26 +97,28 @@ export default function AdminPage() {
             }
         }
     };
-
     const fetchData = async () => {
-        const response = await fetch("/api/products");
+        const query = cursor ? `?cursor=${cursor}&pageSize=${pageSize}` : `?pageSize=${pageSize}`;
+        const response = await fetch(`/api/paginationadmin${query}`);
         if (!response.ok) {
             throw new Error('Failed to fetch data')
         }
         const {products} = await response.json();
-        setProducts(products)
+        setHasNextPage(products.length === pageSize);
+        setHasPrevPage(cursor !== null);
+        setProducts(products);
+
     }
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [cursor]);
 
     const handleDelete = async (id: number) => {
         try {
             setProducts(products.filter((product) => product.id !== id));
-            await fetch(`/api/deleteProduct/${id}`,{
-                method:"DELETE"
+            await fetch(`/api/deleteProduct/${id}`, {
+                method: "DELETE"
             })
-
         } catch (error) {
             console.error("Échec de la suppression du produit :", error);
         }
@@ -129,6 +135,14 @@ export default function AdminPage() {
         });
     };
 
+    const handleNextPage = () => {
+        if (products.length > 0) {
+            setCursor(products[products.length - 1].id);
+        }
+    };
+    const handlePrevPage = () => {
+        setCursor(null);
+    };
 
     return (
         <section className="p-3 flex flex-col justify-center items-center">
@@ -155,23 +169,23 @@ export default function AdminPage() {
                                 Créer le produit.
                             </DialogDescription>
                         </DialogHeader>
-                        <form onSubmit={(e) => handleSubmit(e,"CREATE")}>
+                        <form onSubmit={(e) => handleSubmit(e, "CREATE")}>
                             <Label htmlFor="name">Nom</Label>
                             <Input name="name" id="name" type="text" onChange={handleChange}/>
                             <Label htmlFor="desc">Description</Label>
-                            <Textarea id="description" name="description"  onChange={handleChange}/>
+                            <Textarea id="description" name="description" onChange={handleChange}/>
                             <Label htmlFor="price">Prix</Label>
-                            <Input type="number" name="price" id="price"  onChange={handleChange}/>
+                            <Input type="number" name="price" id="price" onChange={handleChange}/>
                             <Label htmlFor="quantity">Quantité</Label>
-                            <Input type="number" name="quantity" id="quantity"  onChange={handleChange}/>
+                            <Input type="number" name="quantity" id="quantity" onChange={handleChange}/>
                             <Label htmlFor="image">Image</Label>
-                            <Input id="image" name="image" type="file"  onChange={handleChange}/>
+                            <Input id="image" name="image" type="file" onChange={handleChange}/>
                             <Label htmlFor='categorie' className="text-sm">Categorie</Label>
-                            <Select onValueChange={handleSelectChange}  name="categorie">
+                            <Select onValueChange={handleSelectChange} name="categorie">
                                 <SelectTrigger id="categorie" className="mt-3 mb-3 w-full">
                                     <SelectValue placeholder="Choissisez une catégorie"></SelectValue>
                                 </SelectTrigger>
-                                <SelectContent   id="categorie" >
+                                <SelectContent id="categorie">
                                     <SelectItem value="1">Pull</SelectItem>
                                     <SelectItem value="2">T-shirt</SelectItem>
                                     <SelectItem value="3">Collier</SelectItem>
@@ -179,7 +193,8 @@ export default function AdminPage() {
                                 </SelectContent>
                             </Select>
                             <div className=" mt-3 w-full flex justify-center">
-                                <DialogClose type="submit" className=" bg-green-600 p-3 rounded-md text-white hover:bg-green-400">
+                                <DialogClose type="submit"
+                                             className=" bg-green-600 p-3 rounded-md text-white hover:bg-green-400">
                                     Créer
                                 </DialogClose>
                             </div>
@@ -211,14 +226,14 @@ export default function AdminPage() {
                             }
                         </td>
                         <td>{product.quantity}</td>
-                        <td>{product.categoriesId}</td>
+                        <td>{categories[product.categoriesId]}</td>
                         <td>
                             <div className="flex items-center justify-center gap-2">
                                 <Dialog>
                                     <TooltipProvider>
                                         <Tooltip>
                                             <TooltipTrigger asChild
-                                                             className="flex items-center justify-center text-white rounded-md bg-orange-400 max-w-[56px] w-[56px] h-[40px]">
+                                                            className="flex items-center justify-center text-white rounded-md bg-orange-400 max-w-[56px] w-[56px] h-[40px]">
                                                 <DialogTrigger onClick={() => handleEdit(product)}>
                                                     <Pencil/>
                                                 </DialogTrigger>
@@ -235,7 +250,7 @@ export default function AdminPage() {
                                                 Modifier le produit.
                                             </DialogDescription>
                                         </DialogHeader>
-                                        <form onSubmit={(e) =>handleSubmit(e,"UPDATE")}>
+                                        <form onSubmit={(e) => handleSubmit(e, "UPDATE")}>
                                             <Input type="hidden" value={formData.id} name="id" onChange={handleChange}/>
                                             <Label htmlFor="name">Nom</Label>
                                             <Input value={formData.name} name="name" id="name" type="text"
@@ -277,7 +292,9 @@ export default function AdminPage() {
                                 <form className="flex items-center justify-center flex-col">
                                     <TooltipProvider>
                                         <Tooltip>
-                                            <TooltipTrigger  className="flex items-center justify-center text-white rounded-md bg-red-500 hover:bg-red-600 max-w-[56px] w-[56px] h-[40px]" onClick={() => handleDelete(product.id)} >
+                                            <TooltipTrigger
+                                                className="flex items-center justify-center text-white rounded-md bg-red-500 hover:bg-red-600 max-w-[56px] w-[56px] h-[40px]"
+                                                onClick={() => handleDelete(product.id)}>
                                                 <X/>
                                             </TooltipTrigger>
                                             <TooltipContent>
@@ -293,6 +310,12 @@ export default function AdminPage() {
                 ))}
                 </tbody>
             </table>
+            <div className="w-full flex justify-around mt-3">
+                <Button onClick={handlePrevPage} disabled={!hasPrevPage}
+                        variant="defaultBlack">Précedent</Button>
+                <Button onClick={handleNextPage} disabled={!hasNextPage}
+                        variant="defaultBlack">Suivant</Button>
+            </div>
         </section>
     )
 }
