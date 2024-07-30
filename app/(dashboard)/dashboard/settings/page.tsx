@@ -12,7 +12,6 @@ const updateUser = async (formData: FormData) => {
 }
 export default async function SettingsPage() {
     const session = await auth();
-    const user = session;
     if (!session) return redirect("/");
 
     return (

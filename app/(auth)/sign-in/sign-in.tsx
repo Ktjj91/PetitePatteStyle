@@ -5,25 +5,35 @@ import {Separator} from "@/components/ui/separator";
 import GoogleLogo from "@/public/google.png"
 import Image from "next/image";
 import Link from "next/link"
-import {redirect} from "next/navigation";
+import {isRedirectError} from "next/dist/client/components/redirect";
 
 export function SignIn() {
     return (
         <div className="container mt-5 flex flex-col items-center justify-center space-y-4">
             <h1 className="font-bold text-xl">Connexion/S’inscrire</h1>
             <form
-                className="flex flex-col items-center space-y-3"
-                action={async () => {
+                action={async (formData) => {
                     "use server"
-                    await signIn("credentials")
+                    try {
+                        await signIn("credentials",{
+                            email:formData.get("email"),
+                            password:formData.get("password"),
+                            redirectTo:'/dashboard/settings',
+                        });
+
+                    } catch (e) {
+                        if(isRedirectError(e)){
+                            throw e
+                    }}
                 }}
+                className="flex flex-col items-center space-y-3"
             >
                 <div className=" flex flex-col space-y-3">
-                    <Input size={50} type="text" placeholder="Entrer votre email"/>
-                    <Input type="password" placeholder="Entrer votre mot de passe"/>
+                    <Input name="email" size={50} type="text" placeholder="Entrer votre email"/>
+                    <Input name="password" type="password" placeholder="Entrer votre mot de passe"/>
                 </div>
 
-                <Button size="xl" variant="defaultBlack">Connexion/S’inscrire</Button>
+                <Button type="submit" size="xl" variant="defaultBlack">Connexion/S’inscrire</Button>
             </form>
             <section className="flex items-center justify-center space-x-3  ">
                 <Separator className="w-40 "/>

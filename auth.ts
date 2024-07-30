@@ -2,39 +2,68 @@ import NextAuth,{ type DefaultSession }  from "next-auth"
 import Google from "@auth/core/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import {prisma} from "@/db/db";
-
-
-
+import Credentials from "next-auth/providers/credentials"
+// @ts-ignore
+import {genSaltSync, hashSync} from "bcryptjs";
 
 declare module "next-auth" {
-    /**
-     * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
-     */
     interface Session {
         user: {
-            role: "ROLE" | "USER" | unknown
-            /**
-             * By default, TypeScript merges new interface properties and overwrites existing ones.
-             * In this case, the default session user properties will be overwritten,
-             * with the new ones defined above. To keep the default session user properties,
-             * you need to add them back into the newly declared interface.
-             */
+            role: string
         } & DefaultSession["user"]
+    }
+    interface User {
+        role?:string
     }
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     adapter: PrismaAdapter(prisma),
-    providers: [Google({
+    providers: [
+        Google({
         profile(profile) {
             return {role: profile.role ?? "USER",email:profile.email}
-        }
-    })],
-    // callbacks: {
-    //     session({ session   , token }) {
-    //         session.user.role = token.role
-    //         return session
-    //     },
-    // }
+        },
+    }),
+        Credentials({
+            type: "credentials",
+            credentials:{
+                email:{},
+                password:{},
+            },
+            authorize: async (credentials) => {
+                const salt = genSaltSync(10);
+                const hashPassword =  hashSync(credentials.password, salt);
+                const user = await prisma.user.findUnique({
+                    where:{email:credentials.email as string}
+                })
+                if(user){
+                   return {...user,id:user.id.toString()}
+                } else {
+                    const newUser = await prisma.user.create({
+                        data:{
+                            email:credentials.email as string,
+                            password:hashPassword,
+                            role:"USER"
+                        }
+                    });
+                   return  {...newUser,id:newUser.id.toString()}
+                }
+            }
+
+        })
+    ],
+    callbacks:{
+        async session({session,user,token}) {
+                   return {
+                       ...session,
+                       user:{
+                           ...session.user,
+                           role:user.role,
+                       }
+                   }
+               }
+
+        },
 })
 
