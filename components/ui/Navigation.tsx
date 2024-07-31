@@ -18,8 +18,12 @@ import {Collapsible, CollapsibleTrigger, CollapsibleContent} from "@/components/
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {SignOut} from "@/components/ui/SignOut";
 import {signOut} from "@/auth";
+import {Session} from "next-auth";
 
-export default  function Navigation({session} :any) {
+interface NavigationProps {
+    session?: Session | null
+}
+export default  function Navigation({session} :NavigationProps) {
 
     return (
         <header
