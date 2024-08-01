@@ -2,9 +2,11 @@ import {prisma} from "@/db/db";
 import {join} from 'path'
 import {NextResponse} from "next/server";
 import {writeFile} from "node:fs/promises";
+import {auth} from "@/auth";
 
 
-export async function PUT(request: Request) {
+export const PUT =  auth(async function PUT(request) {
+    if (request.auth?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
 
     try {
         const formData = await request.formData();
@@ -41,4 +43,4 @@ export async function PUT(request: Request) {
         console.log(e)
         return NextResponse.json({error: e}, {status: 500})
     }
-}
+})

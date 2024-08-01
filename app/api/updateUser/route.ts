@@ -1,34 +1,35 @@
 import {prisma} from "@/db/db";
 import {NextResponse} from "next/server";
-// @ts-ignore
-import {genSaltSync, hashSync} from "bcryptjs";
+import {UpdateUserSchema} from "@/schemas";
+import {auth} from "@/auth"
 
+export const PUT = auth(async function PUT(request) {
+    // TODO verification session a faire
+    if (request.auth) return NextResponse.json({message: "Not authenticated"}, {status: 401})
 
-export async function PUT(request: Request) {
     try {
         const formData = await request.formData();
-        const sessionToken = formData.get('sessionToken') as string;
-        const name = formData.get("name") as string;
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        const userSession = await prisma.session.findUnique({
-            where: {sessionToken},
-            include: {user: true}
+        const formObject: Record<string, FormDataEntryValue> = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
         });
-        const user = userSession?.user;
+        const result = UpdateUserSchema.safeParse(formObject);
+        if (!result.success) {
+            return NextResponse.json({message: result.error.errors}, {status: 400});
+        }
+        const {userId, name} = result.data;
 
-        const salt = genSaltSync(10);
-        const hashPassword = hashSync(password, salt);
-
+        if (isNaN(userId)) {
+            return NextResponse.json({message: "Invalid userId"}, {status: 400});
+        }
         const updateUser = await prisma.user.update({
-            where: {id: user?.id},
+            where: {id: userId},
             data: {
-                name: name,
-                password: hashPassword
+                name
             }
         })
-        return NextResponse.json( {status: 204})
-    } catch (e) {
-
+        return NextResponse.json({success: updateUser})
+    } catch (error) {
+        return NextResponse.json({message: error}, {status: 500})
     }
-}
+})
