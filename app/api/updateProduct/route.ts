@@ -5,8 +5,9 @@ import {writeFile} from "node:fs/promises";
 import {auth} from "@/auth";
 
 
-export const PUT =  auth(async function PUT(request) {
-    if (request.auth?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
+export async function PUT(request:Request) {
+    const session = await auth();
+    if (session?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
 
     try {
         const formData = await request.formData();
@@ -15,16 +16,23 @@ export const PUT =  auth(async function PUT(request) {
         const description = formData.get('description') as string;
         const price = formData.get('price') as string;
         const quantity = Number(formData.get('quantity'));
-        const image: File | null = formData.get('image') as unknown as File;
         const categorie = Number(formData.get('categorie'));
 
-        const bytes = await image.arrayBuffer();
-        const buffer = Buffer.from(bytes);
+        const imageFile = formData.get('image') ;
+        let imagePath = null;
 
-        const imagePath = `/items/${image.name}`;
-        const fullPath = join(process.cwd(), "public", imagePath);
+        if(imageFile){
+            const image: File = imageFile as File;
+            const bytes = await image.arrayBuffer();
+            const buffer = Buffer.from(bytes);
+            imagePath = `/items/${image.name}`;
+            const fullPath = join(process.cwd(), "public", imagePath);
+            await writeFile(fullPath, buffer);
 
-        await writeFile(fullPath, buffer)
+        }
+        const product = await prisma.products.findUnique({
+            where:{id:id}
+        })
         const updateProduct = await prisma.products.update({
             where: {id: id},
             data: {
@@ -32,7 +40,7 @@ export const PUT =  auth(async function PUT(request) {
                 description: description,
                 price: price,
                 quantity: quantity,
-                image: imagePath,
+                image: imagePath || product?.image,
                 categoriesId: categorie
             }
         })
@@ -43,4 +51,4 @@ export const PUT =  auth(async function PUT(request) {
         console.log(e)
         return NextResponse.json({error: e}, {status: 500})
     }
-})
+}

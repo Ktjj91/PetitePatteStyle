@@ -3,12 +3,14 @@ import Google from "@auth/core/providers/google";
 import {PrismaAdapter} from "@auth/prisma-adapter"
 import {prisma} from "@/db/db";
 import Facebook from "next-auth/providers/facebook"
+import {NextResponse} from "next/server";
+import {redirect} from "next/navigation";
 
 
 declare module "next-auth" {
     interface Session {
         user: {
-            role: string
+            role: string,
         } & DefaultSession["user"]
     }
 

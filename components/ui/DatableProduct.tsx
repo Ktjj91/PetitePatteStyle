@@ -19,7 +19,7 @@ import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/c
 import {TooltipProvider, Tooltip, TooltipTrigger, TooltipContent} from "@radix-ui/react-tooltip";
 import {Button} from "@/components/ui/button";
 import {Session} from "next-auth";
-import { useRouter } from 'next/navigation'
+import {useRouter} from 'next/navigation'
 
 interface Categories {
     [key: number]: string;
@@ -30,9 +30,9 @@ interface DatableProductProps {
 
 }
 
-export default function DatableProduct({session} : DatableProductProps) {
+export default function DatableProduct({session}: DatableProductProps) {
     const router = useRouter();
-    if(session?.user?.role !== "ADMIN") router.push('/dashboard/settings');
+    if (session?.user?.role !== "ADMIN") router.push('/dashboard/settings');
 
     const setProducts = useProductStore.use.setProducts();
     const products = useProductStore.use.products();
@@ -56,7 +56,6 @@ export default function DatableProduct({session} : DatableProductProps) {
         3: "Collier",
         4: "Harnais"
     }
-
     const handleChange = (e: any) => {
         const {name, value, files} = e.target;
         if (name === 'image') {
@@ -79,32 +78,49 @@ export default function DatableProduct({session} : DatableProductProps) {
         if (formData.image) {
             data.append('image', formData.image);
         }
-        if (route === "UPDATE") {
-            const response = await fetch("/api/updateProduct", {
-                method: 'PUT',
+        const url = route === "UPDATE" ? "/api/updateProduct" : "/api/createProduct";
+        const method = route === "UPDATE" ? 'PUT' : 'POST';
+        try {
+            const response = await fetch(url, {
+                method: method,
                 body: data,
             });
-
             if (response.ok) {
                 console.log('Form submitted successfully');
                 fetchData();
             } else {
                 console.error('Form submission failed');
             }
-        } else {
+        } catch (error) {
+            console.error('Error submitting form:', error);
 
-            const response = await fetch("/api/createProduct", {
-                method: 'POST',
-                body: data,
-            });
-
-            if (response.ok) {
-                console.log('Form submitted successfully');
-                fetchData();
-            } else {
-                console.error('Form submission failed');
-            }
         }
+        // if (route === "UPDATE") {
+        //     const response = await fetch("/api/updateProduct", {
+        //         method: 'PUT',
+        //         body: data,
+        //     });
+        //
+        //     if (response.ok) {
+        //         console.log('Form submitted successfully');
+        //         fetchData();
+        //     } else {
+        //         console.error('Form submission failed');
+        //     }
+        // } else {
+        //
+        //     const response = await fetch("/api/createProduct", {
+        //         method: 'POST',
+        //         body: data,
+        //     });
+        //
+        //     if (response.ok) {
+        //         console.log('Form submitted successfully');
+        //         fetchData();
+        //     } else {
+        //         console.error('Form submission failed');
+        //     }
+        // }
     };
     const fetchData = async () => {
         const query = cursor ? `?cursor=${cursor}&pageSize=${pageSize}` : `?pageSize=${pageSize}`;
@@ -133,7 +149,7 @@ export default function DatableProduct({session} : DatableProductProps) {
             setProducts(products.filter((product) => product.id !== id));
             await fetch(`/api/deleteProduct`, {
                 method: "DELETE",
-                body:formData
+                body: formData
             })
         } catch (error) {
             console.error("Échec de la suppression du produit :", error);
@@ -187,17 +203,17 @@ export default function DatableProduct({session} : DatableProductProps) {
                         </DialogHeader>
                         <form onSubmit={(e) => handleSubmit(e, "CREATE")}>
                             <Label htmlFor="name">Nom</Label>
-                            <Input  required name="name" id="name" type="text" onChange={handleChange}/>
+                            <Input required name="name" id="name" type="text" onChange={handleChange}/>
                             <Label htmlFor="desc">Description</Label>
                             <Textarea id="description" name="description" onChange={handleChange}/>
                             <Label htmlFor="price">Prix</Label>
-                            <Input  required type="number" name="price" id="price" onChange={handleChange}/>
+                            <Input required type="number" name="price" id="price" onChange={handleChange}/>
                             <Label htmlFor="quantity">Quantité</Label>
-                            <Input   required type="number" name="quantity" id="quantity" onChange={handleChange}/>
+                            <Input required type="number" name="quantity" id="quantity" onChange={handleChange}/>
                             <Label htmlFor="image">Image</Label>
-                            <Input   required id="image" name="image" type="file" onChange={handleChange}/>
+                            <Input required id="image" name="image" type="file" onChange={handleChange}/>
                             <Label htmlFor='categorie' className="text-sm">Categorie</Label>
-                            <Select  required onValueChange={handleSelectChange} name="categorie">
+                            <Select required onValueChange={handleSelectChange} name="categorie">
                                 <SelectTrigger id="categorie" className="mt-3 mb-3 w-full">
                                     <SelectValue placeholder="Choissisez une catégorie"></SelectValue>
                                 </SelectTrigger>
@@ -269,21 +285,22 @@ export default function DatableProduct({session} : DatableProductProps) {
                                         <form onSubmit={(e) => handleSubmit(e, "UPDATE")}>
                                             <Input type="hidden" value={formData.id} name="id" onChange={handleChange}/>
                                             <Label htmlFor="name">Nom</Label>
-                                            <Input   required value={formData.name} name="name" id="name" type="text"
+                                            <Input value={formData.name} name="name" id="name" type="text"
                                                    onChange={handleChange}/>
                                             <Label htmlFor="desc">Description</Label>
-                                            <Textarea  required value={formData.description} id="description" name="description"
+                                            <Textarea required value={formData.description} id="description"
+                                                      name="description"
                                                       onChange={handleChange}/>
                                             <Label htmlFor="price">Prix</Label>
-                                            <Input  required value={formData.price} type="number" name="price" id="price"
+                                            <Input value={formData.price} type="number" name="price" id="price"
                                                    onChange={handleChange}/>
                                             <Label htmlFor="quantity">Quantité</Label>
-                                            <Input  required value={formData.quantity} type="number" name="quantity" id="quantity"
+                                            <Input value={formData.quantity} type="number" name="quantity" id="quantity"
                                                    onChange={handleChange}/>
                                             <Label htmlFor="image">Image</Label>
-                                            <Input   required onChange={handleChange} id="image" name="image" type="file"/>
+                                            <Input onChange={handleChange} id="image" name="image" type="file"/>
                                             <Label htmlFor='categorie' className="text-sm">Categorie</Label>
-                                            <Select  required onValueChange={handleSelectChange} name="categorie">
+                                            <Select onValueChange={handleSelectChange} name="categorie">
                                                 <SelectTrigger id="categorie" className="mt-3 mb-3 w-full">
                                                     <SelectValue
                                                         placeholder={categories[product.categoriesId]}></SelectValue>
@@ -296,23 +313,24 @@ export default function DatableProduct({session} : DatableProductProps) {
                                                 </SelectContent>
                                             </Select>
                                             <div className=" mt-3 w-full flex justify-center">
-                                                <DialogClose
+                                                <Button
                                                     className="bg-orange-400 p-3 rounded-md text-white hover:bg-orange-600"
                                                     type="submit">
                                                     Modifier
-                                                </DialogClose>
+                                                </Button>
                                             </div>
                                         </form>
                                     </DialogContent>
                                 </Dialog>
-                                <form onSubmit={(e) => handleDelete(e)} className="flex items-center justify-center flex-col">
+                                <form onSubmit={(e) => handleDelete(e)}
+                                      className="flex items-center justify-center flex-col">
                                     <TooltipProvider>
                                         <Tooltip>
-                                                <Input  value={product.id} name="id"  type="hidden" />
-                                                <TooltipTrigger type="submit"
-                                                    className="flex items-center justify-center text-white rounded-md bg-red-500 hover:bg-red-600 max-w-[56px] w-[56px] h-[40px]">
-                                                        <X/>
-                                                </TooltipTrigger>
+                                            <Input value={product.id} name="id" type="hidden"/>
+                                            <TooltipTrigger type="submit"
+                                                            className="flex items-center justify-center text-white rounded-md bg-red-500 hover:bg-red-600 max-w-[56px] w-[56px] h-[40px]">
+                                                <X/>
+                                            </TooltipTrigger>
                                             <TooltipContent>
                                                 Supprimer le produit
                                             </TooltipContent>

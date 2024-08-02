@@ -4,10 +4,10 @@ import {prisma} from "@/db/db";
 import {NextResponse} from "next/server";
 import {auth} from "@/auth";
 
-export const POST = auth( async function POST(req) {
-    if (req.auth?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
+export const POST = auth( async function POST(request) {
+    if (request.auth?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
     try {
-        const formData = await req.formData();
+        const formData = await request.formData();
         const name = formData.get('name') as string;
         const description = formData.get('description') as string;
         const quantity = Number(formData.get('quantity'));
