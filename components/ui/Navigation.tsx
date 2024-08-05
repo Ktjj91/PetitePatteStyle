@@ -12,18 +12,35 @@ import {
 import Logo from "../../public/petitepattestyle.png"
 import Image from "next/image";
 import {UserRound, ShoppingCart, Menu} from "lucide-react";
-import {Sheet, SheetClose, SheetContent, SheetTrigger} from "@/components/ui/sheet";
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+    SheetDescription
+} from "@/components/ui/sheet";
 import {Button} from "@/components/ui/button";
 import {Collapsible, CollapsibleTrigger, CollapsibleContent} from "@/components/ui/collapsible";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {SignOut} from "@/components/ui/SignOut";
-import {signOut} from "@/auth";
 import {Session} from "next-auth";
+import {useCartProduct, useProductStore} from "@/app/store";
+import {ProductType} from "@/types/ProductType";
+import {FaTrash} from "react-icons/fa";
 
 interface NavigationProps {
     session?: Session | null
 }
-export default  function Navigation({session} :NavigationProps) {
+
+export default function Navigation({session}: NavigationProps) {
+    const products = useCartProduct.use.products();
+    const totalProductCount = products.reduce((totalCount, product) => totalCount + product.quantity, 0);
+    const totalPrice = products.reduce((total, product) => total + (Number(product.price) * product.quantity), 0);
+    const decrementQuantity = useCartProduct.use.decrementQuantity();
+    const incrementQuantity = useCartProduct.use.incrementQuantity();
+    const removeCart = useCartProduct.use.removeFromCart();
 
     return (
         <header
@@ -40,8 +57,9 @@ export default  function Navigation({session} :NavigationProps) {
                             <NavigationMenuTrigger>Vêtements</NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <div className="grid gap-2 lg:w-[300px]">
-                                    <Link  legacyBehavior passHref href="/pull">
-                                        <NavigationMenuLink className={`${navigationMenuTriggerStyle()} hover:bg-gray-300 w-[300px]`}>
+                                    <Link legacyBehavior passHref href="/pull">
+                                        <NavigationMenuLink
+                                            className={`${navigationMenuTriggerStyle()} hover:bg-gray-300 w-[300px]`}>
                                             Pull
                                         </NavigationMenuLink>
                                     </Link>
@@ -94,10 +112,11 @@ export default  function Navigation({session} :NavigationProps) {
                                                 <Link className="bloc w-full" href="/dashboard/settings">Profile</Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem>
-                                                <Link className="bloc w-full" href="/dashboard/admin">Administration</Link>
+                                                <Link className="bloc w-full"
+                                                      href="/dashboard/admin">Administration</Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem>
-                                             <SignOut />
+                                                <SignOut/>
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -110,10 +129,50 @@ export default  function Navigation({session} :NavigationProps) {
                                         <span
                                             className="p-2 flex items-center justify-center rounded-full  hover:bg-secondary"><ShoppingCart/></span>
                                         <span
-                                            className=" text-white absolute top-0 right-0 bg-red-500 rounded-full p-1 text-[11px] flex items-center justify-center h-4 w-4">0</span>
+                                            className=" text-white absolute top-0 right-0 bg-red-500 rounded-full p-1 text-[11px] flex items-center justify-center h-4 w-4">{totalProductCount}</span>
                                     </SheetTrigger>
                                     <SheetContent side="right">
+                                        <SheetContent>
+                                            <SheetHeader>
+                                                <SheetTitle className="text-3xl">Panier</SheetTitle>
+                                                <SheetDescription>
+                                                    Servez vous !
+                                                </SheetDescription>
+                                            </SheetHeader>
+                                            {
+                                                products.length === 0 ? (
+                                                    <span>Le panier est vide.</span>
+                                                ) : products.map((product) => (
+                                                    <div className="p-4" key={product.id}>
+                                                        <Image width={50} height={50} src={product.image}
+                                                               alt={product.name}/>
+                                                        <h3>{product.name}</h3>
+                                                        <p><span>Quantité: </span>{product.quantity}</p>
+                                                        <p><span>Taille: </span>{product.size}</p>
+                                                        <p>Prix: {product.price} €</p>
+                                                        <div className="flex items-center gap-2">
+                                                            <button
+                                                                className=" text-white w-6 h-6 mt-2 bg-gray-500 hover:bg-gray-600 p-2 rounded-lg cursor-pointer flex items-center justify-center"
+                                                                onClick={() => decrementQuantity(product.id)}>-
+                                                            </button>
+                                                            <button
+                                                                className=" text-white w-6 h-6 mt-2 bg-gray-500 hover:bg-gray-600 p-2 rounded-lg cursor-pointer flex items-center justify-center"
+                                                                onClick={() => incrementQuantity(product.id)}>+
+                                                            </button>
+                                                            <button onClick={() => removeCart(product.id)}
+                                                                    className="bg-red-500 text-white  hover:bg-red-600 w-6 h-6 mt-2   p-2 rounded-lg cursor-pointer flex items-center justify-center">
+                                                                <FaTrash/>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            }
 
+                                            <p className="mt-5 text-gray-700 flex items-center gap-2">
+                                                <span>Total : </span><span
+                                                className="font-bold text-2xl">{totalPrice}€</span></p>
+                                            <Button disabled={totalPrice === 0}  className="w-full mt-3" variant="defaultBlack">Paiement</Button>
+                                        </SheetContent>
                                     </SheetContent>
                                 </Sheet>
                             </NavigationMenuItem>

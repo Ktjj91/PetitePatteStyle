@@ -23,10 +23,68 @@ export const useProductStore = createSelectors(create(combine({
     products: [] as ProductType[],
     product: {} as ProductType
 }, (set) => ({
-    setProducts(products:ProductType[]) {
+    setProducts(products: ProductType[]) {
         set({products})
     },
-    setProduct(product:ProductType){
+    setProduct(product: ProductType) {
         set({product})
-    }
+    },
 }))))
+
+export const useCartProduct = createSelectors(create(combine({
+        products: [] as ProductType[],
+    }, (set) => ({
+        setProducts(products: ProductType[]) {
+            set({products})
+        },
+        addToCart(product: ProductType) {
+            set((state) => {
+                const existingProductIndex = state.products.findIndex((p) => p.id == product.id);
+                if (existingProductIndex !== -1) {
+                    const updateProducts = [...state.products];
+                    updateProducts[existingProductIndex] = {
+                        ...updateProducts[existingProductIndex],
+                        quantity: updateProducts[existingProductIndex].quantity + product.quantity
+                    };
+                    return {products: updateProducts}
+                } else {
+                    return {products: [...state.products, product]};
+                }
+            })
+        },
+        decrementQuantity(productId: number) {
+            set((state) => {
+                const updateProducts = state.products.map((product) => {
+                    if (product.id === productId) {
+                        if (product.quantity > 1) {
+                            return {...product,quantity:product.quantity - 1}
+                        } else {
+                            return null;
+                        }
+                    }
+                    return product;
+
+                }).filter(product => product !== null);
+                return {products: updateProducts as ProductType[]};
+
+            })
+        },
+        incrementQuantity(productId: number) {
+            set((state) => {
+                const updateProducts = state.products.map((product) => {
+                    if (product.id === productId) {
+                        return {...product, quantity: product.quantity + 1}
+                    }
+                    return product;
+                });
+                return {products: updateProducts as ProductType[]};
+            })
+        },
+        removeFromCart(productId: number) {
+            set((state) => {
+                const updatedProducts = state.products.filter((product) => product.id !== productId);
+                return {products: updatedProducts};
+            })
+        }
+    })
+)))
