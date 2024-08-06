@@ -3,9 +3,9 @@
 import {signIn} from "@/auth";
 import {AuthError} from "next-auth";
 
-export const signInWithGoogle = async (formData:any) => {
+export const signInWitFacebook = async (formData:any) => {
     try {
-        await signIn('google',{
+        await signIn('facebook',{
             redirectTo:"/dashboard/settings",
             formData:formData
         })
