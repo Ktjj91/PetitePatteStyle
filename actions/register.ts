@@ -4,6 +4,7 @@ import {getUserByEmail} from "@/data/db";
 import {prisma} from "@/db/db";
 import {LoginSchema} from "@/schemas";
 import * as z from "zod"
+import {stripe} from "@/stripe";
 export const register = async (values:z.infer<typeof LoginSchema>) => {
     // const email = formData.get("email") as string;
     // const password = formData.get("password") as string;
@@ -24,6 +25,17 @@ export const register = async (values:z.infer<typeof LoginSchema>) => {
                 password:hasPassword,
             }
         })
+        const stripeCustomer = await stripe.customers.create({
+            email
+        });
+         await prisma.user.update({
+             where:{
+                 id:user.id
+             },
+             data:{
+                 stripeCustomerId:stripeCustomer.id
+             }
+         })
         return user;
     } catch (error) {
         throw error;

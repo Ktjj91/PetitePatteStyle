@@ -6,12 +6,13 @@ import Facebook from "next-auth/providers/facebook"
 import Credentials from "next-auth/providers/credentials"
 import bcryptjs from "bcryptjs"
 import {getUserByEmail} from "@/data/db";
-
+import {stripe} from "@/stripe"
 
 declare module "next-auth" {
     interface Session {
         user: {
             role: string,
+            stripeCustomerId:string
         } & DefaultSession["user"]
     }
 
@@ -29,17 +30,43 @@ declare module "next-auth/jwt" {
     interface JWT {
         /** OpenID ID Token */
         role?: string
+        stripeCustomerId:string
+
     }
 }
 
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
     adapter: PrismaAdapter(prisma),
-    pages:{
+    pages: {
         signIn: '/sign-in',
     },
     session: {
         strategy: "jwt"
+    },
+    events: {
+        createUser: async (message) => {
+            const userId = message.user.id;
+            const email = message.user.email;
+            if (!userId || !email) {
+                return;
+            }
+            const stripeCustomer = await stripe.customers.create({
+                email
+            });
+
+            await prisma.user.update({
+                where:
+                    {
+                        id: Number(userId)
+                    },
+                data: {
+                    stripeCustomerId: stripeCustomer.id,
+
+                },
+            })
+        }
+
     },
     providers: [
         Facebook({
@@ -86,7 +113,8 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
     callbacks: {
         async session({session, user, token}) {
             if (token) {
-                session.user.role = token.role as string;
+                session.user.role = token.role as string
+                session.user.stripeCustomerId = token.stripeCustomerId
             }
             return session;
         },
@@ -94,6 +122,7 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
             if (user) {
                 token.id = user.id;
                 token.role = user?.role;
+                token.stripeCustomerId = user?.stripeCustomerId
             }
             return token;
         },

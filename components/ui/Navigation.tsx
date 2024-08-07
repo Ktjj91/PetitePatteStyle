@@ -41,6 +41,20 @@ export default function Navigation({session}: NavigationProps) {
     const decrementQuantity = useCartProduct.use.decrementQuantity();
     const incrementQuantity = useCartProduct.use.incrementQuantity();
     const removeCart = useCartProduct.use.removeFromCart();
+    const onPayment = async () => {
+        const response = await fetch('http://localhost:3000/api/stripe', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                stripeCustomerId: session?.user?.stripeCustomerId as string,
+                items:products
+            })
+        })
+        const data = await response.json();
+        window.location.href = data.url
+    }
 
     return (
         <header
@@ -171,7 +185,8 @@ export default function Navigation({session}: NavigationProps) {
                                             <p className="mt-5 text-gray-700 flex items-center gap-2">
                                                 <span>Total : </span><span
                                                 className="font-bold text-2xl">{totalPrice}€</span></p>
-                                            <Button disabled={totalPrice === 0}  className="w-full mt-3" variant="defaultBlack">Paiement</Button>
+                                            <Button onClick={onPayment} disabled={totalPrice === 0}
+                                                    className="w-full mt-3" variant="defaultBlack">Paiement</Button>
                                         </SheetContent>
                                     </SheetContent>
                                 </Sheet>
