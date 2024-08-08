@@ -2,13 +2,16 @@ import { Settings } from 'lucide-react';
 import Link from "next/link";
 import {auth, signOut} from "@/auth";
 import { Shield } from 'lucide-react';
+import { Container } from 'lucide-react';
+
 
 export default async function DashboardNav() {
     const session = await auth();
     const userRole = session?.user.role;
     const menuDashBoard = [
         {name: "Parametres", icon:<Settings />, path: "/dashboard/settings",role:"USER"},
-        {name: "Administration", icon:<Shield />, path: "/dashboard/admin",role:"ADMIN"}
+        {name: "Administration", icon:<Shield />, path: "/dashboard/admin",role:"ADMIN"},
+        {name: "Commandes", icon:<Container />, path: "/dashboard/order",role:"USER"}
 
     ]
 

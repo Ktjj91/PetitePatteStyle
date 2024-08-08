@@ -8,7 +8,7 @@ import {useState, useTransition} from "react";
 import {signInWithGoogle} from "@/actions/loginGoogle";
 import {signInWitFacebook} from "@/actions/loginFacebook";
 import {useForm} from "react-hook-form";
-import {LoginSchema} from "@/schemas";
+import {LoginSchema, RegisterSchema} from "@/schemas";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod"
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form"
@@ -25,14 +25,15 @@ export default function Register() {
     const [success, setSuccess] = useState<string | undefined>("")
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
-    const form = useForm<z.infer<typeof LoginSchema>>({
-        resolver: zodResolver(LoginSchema),
+    const form = useForm<z.infer<typeof RegisterSchema>>({
+        resolver: zodResolver(RegisterSchema),
         defaultValues: {
             email: "",
-            password: ""
+            password: "",
+            name:""
         }
     });
-    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
         setSuccess("");
         setError("");
         startTransition(() => {
@@ -56,6 +57,21 @@ export default function Register() {
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6 max-w-[700px] w-full'>
                     <div className="space-y-4">
+                        <FormField control={form.control} name="name" render={({field}) => (
+                            <FormItem>
+                                <FormLabel>
+                                    Nom complet
+                                </FormLabel>
+                                <FormControl>
+                                    <Input {...field}
+                                           placeholder="John Doe"
+                                           disabled={isPending}
+                                    />
+                                </FormControl>
+                                <FormMessage>
+                                </FormMessage>
+                            </FormItem>
+                        )}/>
                         <FormField control={form.control} name="email" render={({field}) => (
                             <FormItem>
                                 <FormLabel>

@@ -27,7 +27,6 @@ import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 import {SignOut} from "@/components/ui/SignOut";
 import {Session} from "next-auth";
 import {useCartProduct, useProductStore} from "@/app/store";
-import {ProductType} from "@/types/ProductType";
 import {FaTrash} from "react-icons/fa";
 
 interface NavigationProps {
@@ -54,6 +53,7 @@ export default function Navigation({session}: NavigationProps) {
         })
         const data = await response.json();
         window.location.href = data.url
+
     }
 
     return (
@@ -174,14 +174,13 @@ export default function Navigation({session}: NavigationProps) {
                                                                 onClick={() => incrementQuantity(product.id)}>+
                                                             </button>
                                                             <button onClick={() => removeCart(product.id)}
-                                                                    className="bg-red-500 text-white  hover:bg-red-600 w-6 h-6 mt-2   p-2 rounded-lg cursor-pointer flex items-center justify-center">
+                                                                    className="bg-red-500 text-white  hover:bg-red-600 w-6 h-6 mt-2 p-2 rounded-lg cursor-pointer flex items-center justify-center">
                                                                 <FaTrash/>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 ))
                                             }
-
                                             <p className="mt-5 text-gray-700 flex items-center gap-2">
                                                 <span>Total : </span><span
                                                 className="font-bold text-2xl">{totalPrice}€</span></p>

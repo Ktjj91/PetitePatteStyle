@@ -52,7 +52,7 @@ export default function Page({params}: { params: { id: string } }) {
         <div
             className="container grid my-5 place-content-center place-items-center lg:grid-cols-2 max-w-7xl  sm:grid-cols-1 md:grid-cols-1">
                 <div className="flex justify-center items-center">
-                    <Image priority width={400} height={400} src={product.image as string} alt={product.name}/>
+                    <Image  width={400} height={400} src={product.image} alt={product.name}/>
                 </div>
                 <div className="flex flex-col justify-center items-start">
                     <h2 className=" text-4xl font-bold self-center mt-3">{product.name}</h2>

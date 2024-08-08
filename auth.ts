@@ -19,8 +19,6 @@ declare module "next-auth" {
     interface User {
         role?: string
     }
-
-
 }
 
 import {JWT} from "next-auth/jwt"
@@ -48,11 +46,14 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
         createUser: async (message) => {
             const userId = message.user.id;
             const email = message.user.email;
+            const name = message.user?.name ;
+
             if (!userId || !email) {
                 return;
             }
             const stripeCustomer = await stripe.customers.create({
-                email
+                email,
+                name: name ?? undefined
             });
 
             await prisma.user.update({
@@ -81,7 +82,7 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
         }),
         Google({
             profile(profile) {
-                return {role: profile.role ?? "USER", email: profile.email}
+                return {role: profile.role ?? "USER", email: profile.email,name:profile.name}
             },
         }),
         Credentials({
@@ -115,14 +116,16 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
             if (token) {
                 session.user.role = token.role as string
                 session.user.stripeCustomerId = token.stripeCustomerId
+                session.user.id = token.id
             }
             return session;
         },
         async jwt({token, user}) {
+            console.log(user)
             if (user) {
                 token.id = user.id;
                 token.role = user?.role;
-                token.stripeCustomerId = user?.stripeCustomerId
+                token.stripeCustomerId = user.stripeCustomerId
             }
             return token;
         },
