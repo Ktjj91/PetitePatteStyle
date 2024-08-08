@@ -28,6 +28,7 @@ export default function Page({params}: { params: { id: string } }) {
         const {product} = await response.json();
         setProduct(product);
     }
+    console.log(product)
     useEffect(() => {
         fetchDataProduct();
     }, []);

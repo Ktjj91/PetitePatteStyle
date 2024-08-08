@@ -47,8 +47,9 @@ export default function Navigation({session}: NavigationProps) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                stripeCustomerId: session?.user?.stripeCustomerId as string,
-                items:products
+                stripeCustomerId: session?.user.stripeCustomerId,
+                items: products,
+                userId: session?.user.id
             })
         })
         const data = await response.json();

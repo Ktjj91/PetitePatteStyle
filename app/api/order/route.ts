@@ -1,7 +1,6 @@
 import {NextResponse} from "next/server";
 import {stripe} from "@/stripe";
 import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
 
 export async function GET(request: NextResponse) {
     const {searchParams} = new URL(request.url);

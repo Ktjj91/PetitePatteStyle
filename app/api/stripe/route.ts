@@ -1,19 +1,20 @@
 import {NextResponse, NextRequest} from "next/server";
 import {stripe} from "@/stripe";
+import {prisma} from "@/db/db";
 
 
 export async function POST(request: NextRequest) {
     try {
-
-        const data:any = await request.json();
+        const data: any = await request.json();
         const items = data.items;
+        const totalAmount = items.reduce((total: number, item: any) => total + item.price * item.quantity, 0);
 
-        const line_items = items.map((item:any) => ({
+        const line_items = items.map((item: any) => ({
             price_data: {
                 currency: 'eur',
                 product_data: {
                     name: item.name,
-                    description:item.description,
+                    description: item.description,
                 },
                 unit_amount: item.price * 100,
             },
@@ -32,32 +33,50 @@ export async function POST(request: NextRequest) {
             cancel_url: "http://localhost:3000/cancel",
             line_items
         })
-        const sessionId = checkoutSession.id
-        // const session = await stripe.checkout.sessions.retrieve(sessionId);
-        // const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, {
-        //     limit: 100,
-        // });
-        // const paymentIntent = await stripe.paymentIntents.retrieve(session.payment_intent as string);
-        // const transactionSummary = {
-        //     customer: session.customer,
-        //     paymentStatus: paymentIntent.status,
-        //     amountTotal: paymentIntent.amount / 100, // Montant en unités monétaires (ex: USD)
-        //     currency: paymentIntent.currency,
-        //     items: lineItems.data.map(item => ({
-        //         name: item.description,
-        //         quantity: item.quantity,
-        //         price: item.amount_total / 100, // Montant unitaire
-        //     })),
-        // };
-        // console.log(transactionSummary)
-
-        return NextResponse.json({msg: checkoutSession, url: checkoutSession.url}, {status: 200})
-
-
-    } catch (error) {
-        console.log("Erreur:", error)
-        return NextResponse.json({error}, {status: 500})
+        if (checkoutSession) {
+            await prisma.orderStripe.create({
+                data: {
+                    customerId: data?.stripeCustomerId,
+                    sessionId: checkoutSession?.id,
+                    paymentIntentId: checkoutSession.payment_intent as string || '',
+                    totalAmount,
+                    currency: "eur",
+                    paymentStatus: "",
+                    userId: data.userId,
+                    items: {
+                        create: items.map((item: any) => ({
+                            name: item.name,
+                            description: item.description,
+                            quantity: item.quantity,
+                            price: item.price * 100,
+                            image: item.image,
+                        }))
+                    }
+                }
+            });
+             items.map(async (item:any) => {
+                 await prisma.products.update({
+                     where:{id:item.id},
+                     data:{
+                         quantity: {
+                             decrement:item.quantity
+                         }
+                     }
+                 })
+             })
 
     }
+
+    return NextResponse.json({msg: checkoutSession, url: checkoutSession.url}, {status: 200})
+
+}
+
+catch
+(error)
+{
+    console.log("Erreur:", error)
+    return NextResponse.json({error}, {status: 500})
+
+}
 
 }

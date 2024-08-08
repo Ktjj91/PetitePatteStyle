@@ -19,8 +19,9 @@ model User {
   orders           Orders[]
   stripeCustomerId String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  OrderPrisma OrderStripe[]
 }
 
 model Account {
@@ -106,4 +107,30 @@ model ProductOnOrder {
   orderId   Int
 
   @@id([productId, orderId])
+}
+
+model OrderStripe {
+  id              Int               @id @default(autoincrement())
+  customerId      String
+  sessionId       String            @unique
+  paymentIntentId String
+  totalAmount     Float
+  currency        String
+  paymentStatus   String
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  items           OrderItemStripe[]
+  userId          Int
+  user            User              @relation(fields: [userId], references: [id])
+}
+
+model OrderItemStripe {
+  id          Int         @id @default(autoincrement())
+  name        String
+  description String
+  quantity    Int
+  price       Float
+  orderId     Int
+  image       String
+  order       OrderStripe @relation(fields: [orderId], references: [id])
 }
