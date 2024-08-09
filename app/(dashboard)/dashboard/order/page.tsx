@@ -1,26 +1,11 @@
+import OrderStripe from "@/components/ui/OrderStripe";
 import {auth} from "@/auth";
-import {stripe} from "@/stripe";
-import {prisma} from "@/db/db";
-import {id} from "postcss-selector-parser";
 
-
-export default async function OrderProduct() {
+export default async function OrderPage() {
     const session = await auth();
-    const p = await prisma.orderStripe.findMany({
-        where: {
-            userId: Number(session?.user?.id)
-        },
-        select:{
-            totalAmount:true,
-           items:true
-        }
-
-    })
-    console.log(p)
 
 
     return (
-        <div>
-        </div>
+        <OrderStripe session={session}/>
     )
 }

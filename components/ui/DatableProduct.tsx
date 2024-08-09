@@ -95,32 +95,6 @@ export default function DatableProduct({session}: DatableProductProps) {
             console.error('Error submitting form:', error);
 
         }
-        // if (route === "UPDATE") {
-        //     const response = await fetch("/api/updateProduct", {
-        //         method: 'PUT',
-        //         body: data,
-        //     });
-        //
-        //     if (response.ok) {
-        //         console.log('Form submitted successfully');
-        //         fetchData();
-        //     } else {
-        //         console.error('Form submission failed');
-        //     }
-        // } else {
-        //
-        //     const response = await fetch("/api/createProduct", {
-        //         method: 'POST',
-        //         body: data,
-        //     });
-        //
-        //     if (response.ok) {
-        //         console.log('Form submitted successfully');
-        //         fetchData();
-        //     } else {
-        //         console.error('Form submission failed');
-        //     }
-        // }
     };
     const fetchData = async () => {
         const query = cursor ? `?cursor=${cursor}&pageSize=${pageSize}` : `?pageSize=${pageSize}`;
