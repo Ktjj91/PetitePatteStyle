@@ -149,6 +149,10 @@ export default function DatableProduct({session}: DatableProductProps) {
     const handlePrevPage = () => {
         setCursor(null);
     };
+    const truncateDescription = (description, maxLength) => {
+        if (description.length <= maxLength) return description;
+        return description.slice(0, maxLength) + '...';
+    };
 
     return (
         <section className="p-3 flex flex-col justify-center items-center">
@@ -208,116 +212,121 @@ export default function DatableProduct({session}: DatableProductProps) {
                     </DialogContent>
                 </Dialog>
             </div>
-            <table
-                className="  mt-3  max-w-[1000px] w-full table-auto  text-center border border-gray-200  border-collapse border-spacing-1.5">
-                <thead>
-                <tr>
-                    <th>Nom</th>
-                    <th>Description</th>
-                    <th>Prix</th>
-                    <th>Image</th>
-                    <th>Quantité</th>
-                    <th>Catégorie</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                {products.map((product) => (
-                    <tr key={product.id} className="border border-gray-200">
-                        <td>{product.name}</td>
-                        <td className="text-sm max-w-[200px]">{product.description}</td>
-                        <td>{product.price}€</td>
-                        <td>
-                            {product.image && <Image width={50} height={50} src={product.image} alt={product.name}/>
-                            }
-                        </td>
-                        <td>{product.quantity}</td>
-                        <td>{categories[product.categoriesId]}</td>
-                        <td>
-                            <div className="flex items-center justify-center gap-2">
-                                <Dialog>
-                                    <TooltipProvider>
-                                        <Tooltip>
-                                            <TooltipTrigger asChild
-                                                            className="flex items-center justify-center text-white rounded-md bg-orange-400 max-w-[56px] w-[56px] h-[40px]">
-                                                <DialogTrigger onClick={() => handleEdit(product)}>
-                                                    <Pencil/>
-                                                </DialogTrigger>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                Modifier le produit
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider>
-                                    <DialogContent>
-                                        <DialogHeader>
-                                            <DialogTitle>Modifier le produit</DialogTitle>
-                                            <DialogDescription>
-                                                Modifier le produit.
-                                            </DialogDescription>
-                                        </DialogHeader>
-                                        <form onSubmit={(e) => handleSubmit(e, "UPDATE")}>
-                                            <Input type="hidden" value={formData.id} name="id" onChange={handleChange}/>
-                                            <Label htmlFor="name">Nom</Label>
-                                            <Input value={formData.name} name="name" id="name" type="text"
-                                                   onChange={handleChange}/>
-                                            <Label htmlFor="desc">Description</Label>
-                                            <Textarea required value={formData.description} id="description"
-                                                      name="description"
-                                                      onChange={handleChange}/>
-                                            <Label htmlFor="price">Prix</Label>
-                                            <Input value={formData.price} type="number" name="price" id="price"
-                                                   onChange={handleChange}/>
-                                            <Label htmlFor="quantity">Quantité</Label>
-                                            <Input value={formData.quantity} type="number" name="quantity" id="quantity"
-                                                   onChange={handleChange}/>
-                                            <Label htmlFor="image">Image</Label>
-                                            <Input onChange={handleChange} id="image" name="image" type="file"/>
-                                            <Label htmlFor='categorie' className="text-sm">Categorie</Label>
-                                            <Select onValueChange={handleSelectChange} name="categorie">
-                                                <SelectTrigger id="categorie" className="mt-3 mb-3 w-full">
-                                                    <SelectValue
-                                                        placeholder={categories[product.categoriesId]}></SelectValue>
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="1">Pull</SelectItem>
-                                                    <SelectItem value="2">T-shirt</SelectItem>
-                                                    <SelectItem value="3">Collier</SelectItem>
-                                                    <SelectItem value="4">Harnais</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                            <div className=" mt-3 w-full flex justify-center">
-                                                <Button
-                                                    className="bg-orange-400 p-3 rounded-md text-white hover:bg-orange-600"
-                                                    type="submit">
-                                                    Modifier
-                                                </Button>
-                                            </div>
-                                        </form>
-                                    </DialogContent>
-                                </Dialog>
-                                <form onSubmit={(e) => handleDelete(e)}
-                                      className="flex items-center justify-center flex-col">
-                                    <TooltipProvider>
-                                        <Tooltip>
-                                            <Input value={product.id} name="id" type="hidden"/>
-                                            <TooltipTrigger type="submit"
-                                                            className="flex items-center justify-center text-white rounded-md bg-red-500 hover:bg-red-600 max-w-[56px] w-[56px] h-[40px]">
-                                                <X/>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                Supprimer le produit
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider>
-                                </form>
-                            </div>
-
-                        </td>
+            <div className="mt-3 mx-auto max-w-[1000px] w-full overflow-x-auto">
+                <table className="w-full table-auto text-center border border-gray-200 text-sm">
+                    <thead>
+                    <tr>
+                        <th className="p-2">Nom</th>
+                        <th className="p-2">Description</th>
+                        <th className="p-2">Prix</th>
+                        <th className="p-2">Image</th>
+                        <th className="p-2">Quantité</th>
+                        <th className="p-2">Catégorie</th>
+                        <th className="p-2">Action</th>
                     </tr>
-                ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {products.map((product) => (
+                        <tr key={product.id} className="border border-gray-200">
+                            <td className="p-2">{product.name}</td>
+                            <td className="p-2 text-sm truncate max-w-[150px] lg:max-w-none lg:whitespace-normal">
+                                {product.description}
+                            </td>
+                            <td>{product.price}€</td>
+                            <td className="p-2">
+                                {product.image && <Image width={50} height={50} src={product.image} alt={product.name}/>
+                                }
+                            </td>
+                            <td className="p-2">{product.quantity}</td>
+                            <td className="p-2">{categories[product.categoriesId]}</td>
+                            <td className="p-2">
+                                <div className="flex items-center justify-center gap-2">
+                                    <Dialog>
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild
+                                                                className="flex items-center justify-center text-white rounded-md bg-orange-400 max-w-[56px] w-[56px] h-[40px]">
+                                                    <DialogTrigger onClick={() => handleEdit(product)}>
+                                                        <Pencil/>
+                                                    </DialogTrigger>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    Modifier le produit
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Modifier le produit</DialogTitle>
+                                                <DialogDescription>
+                                                    Modifier le produit.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <form onSubmit={(e) => handleSubmit(e, "UPDATE")}>
+                                                <Input type="hidden" value={formData.id} name="id"
+                                                       onChange={handleChange}/>
+                                                <Label htmlFor="name">Nom</Label>
+                                                <Input value={formData.name} name="name" id="name" type="text"
+                                                       onChange={handleChange}/>
+                                                <Label htmlFor="desc">Description</Label>
+                                                <Textarea required value={formData.description} id="description"
+                                                          name="description"
+                                                          onChange={handleChange}/>
+                                                <Label htmlFor="price">Prix</Label>
+                                                <Input value={formData.price} type="number" name="price" id="price"
+                                                       onChange={handleChange}/>
+                                                <Label htmlFor="quantity">Quantité</Label>
+                                                <Input value={formData.quantity} type="number" name="quantity"
+                                                       id="quantity"
+                                                       onChange={handleChange}/>
+                                                <Label htmlFor="image">Image</Label>
+                                                <Input onChange={handleChange} id="image" name="image" type="file"/>
+                                                <Label htmlFor='categorie' className="text-sm">Categorie</Label>
+                                                <Select onValueChange={handleSelectChange} name="categorie">
+                                                    <SelectTrigger id="categorie" className="mt-3 mb-3 w-full">
+                                                        <SelectValue
+                                                            placeholder={categories[product.categoriesId]}></SelectValue>
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="1">Pull</SelectItem>
+                                                        <SelectItem value="2">T-shirt</SelectItem>
+                                                        <SelectItem value="3">Collier</SelectItem>
+                                                        <SelectItem value="4">Harnais</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                                <div className=" mt-3 w-full flex justify-center">
+                                                    <Button
+                                                        className="bg-orange-400 p-3 rounded-md text-white hover:bg-orange-600"
+                                                        type="submit">
+                                                        Modifier
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        </DialogContent>
+                                    </Dialog>
+                                    <form onSubmit={(e) => handleDelete(e)}
+                                          className="flex items-center justify-center flex-col">
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <Input value={product.id} name="id" type="hidden"/>
+                                                <TooltipTrigger type="submit"
+                                                                className="flex items-center justify-center text-white rounded-md bg-red-500 hover:bg-red-600 max-w-[56px] w-[56px] h-[40px]">
+                                                    <X/>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    Supprimer le produit
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                    </form>
+                                </div>
+
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
             <div className="w-full flex justify-around mt-3">
                 <Button onClick={handlePrevPage} disabled={!hasPrevPage}
                         variant="defaultBlack">Précedent</Button>

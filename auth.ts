@@ -5,7 +5,7 @@ import {prisma} from "@/db/db";
 import Facebook from "next-auth/providers/facebook"
 import Credentials from "next-auth/providers/credentials"
 import bcryptjs from "bcryptjs"
-import {getUserByEmail} from "@/data/db";
+import {getUserByEmail, linkAccount} from "@/data/db";
 import {stripe} from "@/stripe"
 
 declare module "next-auth" {
@@ -127,6 +127,14 @@ export const {handlers, signIn, signOut, auth} = NextAuth({
                 token.stripeCustomerId = user.stripeCustomerId
             }
             return token;
+        },
+        async signIn({ user, account, profile }) {
+            const existingUser = await getUserByEmail(user.email as string);
+            if (existingUser) {
+                await linkAccount(existingUser.id, account);
+                return true;
+            }
+            return true;
         },
     },
 })

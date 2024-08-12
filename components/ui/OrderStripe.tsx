@@ -28,43 +28,45 @@ export default function OrderStripe({session}: SessionsProps) {
         fetchDataOrderStripe();
     }, []);
 
-    console.log(ordersStripe)
+    if (ordersStripe.length === 0) return <p className="text-center  text-4xl text-center mt-3">Aucune commande
+        effectuer</p>
 
     return (
         <>
-            <table
-                className="mt-3 mx-auto max-w-[1000px] w-full table-auto  text-center border border-gray-200  border-collapse border-spacing-1.5">
-                <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Nom</th>
-                    <th>Prix unitaire</th>
-                    <th>Prix Total</th>
-                    <th>Quantité</th>
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    ordersStripe.map((order: OrderStripeType, orderIndex) => (
-                        order.items.map((item: ItemOrder, itemIndex) => (
-                            <tr className={`${
-                                itemIndex !== order.items.length - 1 ? 'border-none' : 'border-b border-gray-200'
-                            }`} key={`${orderIndex}-${itemIndex}`}>
-                                <td>
-                                        <Image src={item.image} alt={item.name} width={50} height={50} />
-                                </td>
-                                <td>{item.name}</td>
-                                <td>{item.price / 100}€</td>
-                                {itemIndex === 0 ? (
-                                    <td rowSpan={order.items.length}>{order.totalAmount}€</td>
-                                ) : null}
-                                <td>{item.quantity}</td>
-                            </tr>
+            <div className="mt-3 mx-auto max-w-[1000px] w-full overflow-x-auto">
+                <table className="w-full table-auto text-center border border-gray-200">
+                    <thead>
+                    <tr>
+                        <th className="p-2">Image</th>
+                        <th className="p-2">Nom</th>
+                        <th className="p-2">Prix unitaire</th>
+                        <th className="p-2">Prix Total</th>
+                        <th className="p-2">Quantité</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        ordersStripe.map((order: OrderStripeType, orderIndex) => (
+                            order.items.map((item: ItemOrder, itemIndex) => (
+                                <tr className={`${
+                                    itemIndex !== order.items.length - 1 ? 'border-none' : 'border-b border-gray-200'
+                                }`} key={`${orderIndex}-${itemIndex}`}>
+                                    <td>
+                                        <Image className="mx-auto" src={item.image} alt={item.name} width={50} height={50}/>
+                                    </td>
+                                    <td className="p-2">{item.name}</td>
+                                    <td className="p-2">{item.price / 100}€</td>
+                                    {itemIndex === 0 ? (
+                                        <td className="p-2" rowSpan={order.items.length}>{order.totalAmount}€</td>
+                                    ) : null}
+                                    <td className="p-2">{item.quantity}</td>
+                                </tr>
+                            ))
                         ))
-                    ))
-                }
-                </tbody>
-            </table>
+                    }
+                    </tbody>
+                </table>
+            </div>
         </>
     )
 }

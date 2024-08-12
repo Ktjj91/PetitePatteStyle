@@ -1,9 +1,12 @@
 import {NextResponse, NextRequest} from "next/server";
 import {stripe} from "@/stripe";
 import {prisma} from "@/db/db";
+import {auth} from "@/auth";
 
 
-export async function POST(request: NextRequest) {
+export const POST = auth(async function POST(request: NextRequest) {
+    if (!request.auth) return NextResponse.json({message: "Not authenticated"}, {status: 401});
+
     try {
         const data: any = await request.json();
         const items = data.items;
@@ -79,4 +82,4 @@ catch
 
 }
 
-}
+})

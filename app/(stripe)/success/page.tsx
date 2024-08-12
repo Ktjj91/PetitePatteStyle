@@ -33,7 +33,7 @@ export default function SuccessPage() {
             <h1>✅Paiement Réussi !</h1>
             {customerData ? (
                 <div>
-                    <p>Merci pour votre achat</p>
+                    <p>Merci pour votre achat {customerData.email}</p>
                 </div>
             ) : (
                 <p>Chargement des données...</p>

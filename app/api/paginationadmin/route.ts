@@ -1,7 +1,10 @@
 import {prisma} from "@/db/db";
-import {NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
+import {auth} from "@/auth";
 
-export async function GET(request: Request) {
+export const GET =auth( async function GET(request: NextRequest) {
+    if (request.auth?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
+
     const {searchParams} = new URL(request.url);
     const cursor = Number(searchParams.get('cursor'));
     const pageSize = Number(searchParams.get("pageSize")) || 10;
@@ -28,4 +31,4 @@ export async function GET(request: Request) {
     }
 
 
-}
+})

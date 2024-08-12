@@ -12,7 +12,7 @@ export default async function SettingsPage() {
 
             await fetch("http://localhost:3000/api/updateUser", {
                 method: "PUT",
-                body: formData
+                body: formData,
             })
         } catch (error) {
             console.log("error : ", error);

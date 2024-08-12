@@ -127,9 +127,14 @@ export default function Navigation({session}: NavigationProps) {
                                                 <Link className="bloc w-full" href="/dashboard/settings">Profile</Link>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem>
-                                                <Link className="bloc w-full"
-                                                      href="/dashboard/admin">Administration</Link>
+                                                <Link className="bloc w-full" href="/dashboard/order">Commande</Link>
                                             </DropdownMenuItem>
+                                            {
+                                                session.user.role !== "ADMIN" ? undefined : <DropdownMenuItem>
+                                                    <Link className="bloc w-full"
+                                                          href="/dashboard/admin">Administration</Link>
+                                                </DropdownMenuItem>
+                                            }
                                             <DropdownMenuItem>
                                                 <SignOut/>
                                             </DropdownMenuItem>
@@ -146,49 +151,64 @@ export default function Navigation({session}: NavigationProps) {
                                         <span
                                             className=" text-white absolute top-0 right-0 bg-red-500 rounded-full p-1 text-[11px] flex items-center justify-center h-4 w-4">{totalProductCount}</span>
                                     </SheetTrigger>
-                                    <SheetContent side="right">
-                                        <SheetContent>
-                                            <SheetHeader>
-                                                <SheetTitle className="text-3xl">Panier</SheetTitle>
-                                                <SheetDescription>
-                                                    Servez vous !
-                                                </SheetDescription>
-                                            </SheetHeader>
-                                            {
-                                                products.length === 0 ? (
-                                                    <span>Le panier est vide.</span>
-                                                ) : products.map((product) => (
-                                                    <div className="p-4" key={product.id}>
-                                                        <Image width={50} height={50} src={product.image}
-                                                               alt={product.name}/>
-                                                        <h3>{product.name}</h3>
-                                                        <p><span>Quantité: </span>{product.quantity}</p>
-                                                        <p><span>Taille: </span>{product.size}</p>
-                                                        <p>Prix: {product.price} €</p>
-                                                        <div className="flex items-center gap-2">
-                                                            <button
-                                                                className=" text-white w-6 h-6 mt-2 bg-gray-500 hover:bg-gray-600 p-2 rounded-lg cursor-pointer flex items-center justify-center"
-                                                                onClick={() => decrementQuantity(product.id)}>-
-                                                            </button>
-                                                            <button
-                                                                className=" text-white w-6 h-6 mt-2 bg-gray-500 hover:bg-gray-600 p-2 rounded-lg cursor-pointer flex items-center justify-center"
-                                                                onClick={() => incrementQuantity(product.id)}>+
-                                                            </button>
-                                                            <button onClick={() => removeCart(product.id)}
-                                                                    className="bg-red-500 text-white  hover:bg-red-600 w-6 h-6 mt-2 p-2 rounded-lg cursor-pointer flex items-center justify-center">
-                                                                <FaTrash/>
-                                                            </button>
+                                    {
+                                        !session ? (
+                                            <SheetContent side="right">
+                                                <SheetHeader>
+                                                    <SheetTitle className="text-3xl">Veuillez Vous
+                                                        connectez</SheetTitle>
+                                                    <SheetDescription asChild>
+                                                        <Link href="/sign-in">
+                                                            Connecter vous !
+                                                        </Link>
+                                                    </SheetDescription>
+                                                </SheetHeader>
+
+                                            </SheetContent>
+                                        ) : (
+                                            <SheetContent side="right">
+                                                <SheetHeader>
+                                                    <SheetTitle className="text-3xl">Panier</SheetTitle>
+                                                    <SheetDescription>
+                                                        Servez vous !
+                                                    </SheetDescription>
+                                                </SheetHeader>
+                                                {
+                                                    products.length === 0 ? (
+                                                        <span>Le panier est vide.</span>
+                                                    ) : products.map((product) => (
+                                                        <div className="p-4" key={product.id}>
+                                                            <Image width={50} height={50} src={product.image}
+                                                                   alt={product.name}/>
+                                                            <h3>{product.name}</h3>
+                                                            <p><span>Quantité: </span>{product.quantity}</p>
+                                                            <p><span>Taille: </span>{product.size}</p>
+                                                            <p>Prix: {product.price} €</p>
+                                                            <div className="flex items-center gap-2">
+                                                                <button
+                                                                    className=" text-white w-6 h-6 mt-2 bg-gray-500 hover:bg-gray-600 p-2 rounded-lg cursor-pointer flex items-center justify-center"
+                                                                    onClick={() => decrementQuantity(product.id)}>-
+                                                                </button>
+                                                                <button
+                                                                    className=" text-white w-6 h-6 mt-2 bg-gray-500 hover:bg-gray-600 p-2 rounded-lg cursor-pointer flex items-center justify-center"
+                                                                    onClick={() => incrementQuantity(product.id)}>+
+                                                                </button>
+                                                                <button onClick={() => removeCart(product.id)}
+                                                                        className="bg-red-500 text-white  hover:bg-red-600 w-6 h-6 mt-2 p-2 rounded-lg cursor-pointer flex items-center justify-center">
+                                                                    <FaTrash/>
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                ))
-                                            }
-                                            <p className="mt-5 text-gray-700 flex items-center gap-2">
-                                                <span>Total : </span><span
-                                                className="font-bold text-2xl">{totalPrice}€</span></p>
-                                            <Button onClick={onPayment} disabled={totalPrice === 0}
-                                                    className="w-full mt-3" variant="defaultBlack">Paiement</Button>
-                                        </SheetContent>
-                                    </SheetContent>
+                                                    ))
+                                                }
+                                                <p className="mt-5 text-gray-700 flex items-center gap-2">
+                                                    <span>Total : </span><span
+                                                    className="font-bold text-2xl">{totalPrice}€</span></p>
+                                                <Button onClick={onPayment} disabled={totalPrice === 0}
+                                                        className="w-full mt-3" variant="defaultBlack">Paiement</Button>
+                                            </SheetContent>
+                                        )
+                                    }
                                 </Sheet>
                             </NavigationMenuItem>
                         </NavigationMenuList>
@@ -205,12 +225,12 @@ export default function Navigation({session}: NavigationProps) {
                             <Collapsible className="grid gap-2 mt-2 ">
                                 <CollapsibleTrigger className="hover:bg-secondary px-3 py-2 rounded ">
                               <span>
-                                  Vêtements
+                                  Vêtement
                               </span>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
                                     <ul className="space-y-3">
-                                        <li className=" w-full hover:bg-secondary rounded cursor-pointer  px-3 py-2">
+                                        <li className="w-full hover:bg-secondary rounded cursor-pointer  px-3 py-2">
                                             <SheetClose asChild>
                                                 <Link className="block" href="/pull">Pull</Link>
                                             </SheetClose>
@@ -246,10 +266,44 @@ export default function Navigation({session}: NavigationProps) {
                             </Collapsible>
                             <Collapsible className="grid gap-2 mt-2">
                                 <CollapsibleTrigger className="hover:bg-secondary px-3 py-2 rounded ">
-                                    <Link className="hover:bg-secondary rounded px-3 py-2" href="/histoire">Notre
-                                        histoire</Link>
+                                    <SheetClose asChild>
+                                        <Link className="hover:bg-secondary rounded px-3 py-2" href="/histoire"
+                                        >Notre histoire
+                                        </Link>
+                                    </SheetClose>
                                 </CollapsibleTrigger>
                             </Collapsible>
+                            <Collapsible className="grid gap-2 mt-2">
+                                <CollapsibleTrigger className="hover:bg-secondary px-3 py-2 rounded ">
+                                    <SheetClose asChild>
+                                        <Link className="hover:bg-secondary rounded px-3 py-2" href="/dashboard/settings"
+                                        >Parametres
+                                        </Link>
+                                    </SheetClose>
+                                </CollapsibleTrigger>
+                            </Collapsible>
+                            <Collapsible className="grid gap-2 mt-2">
+                                <CollapsibleTrigger className="hover:bg-secondary px-3 py-2 rounded ">
+                                    <SheetClose asChild>
+                                        <Link className="hover:bg-secondary rounded px-3 py-2" href="/dashboard/order"
+                                        >Commandes
+                                        </Link>
+                                    </SheetClose>
+                                </CollapsibleTrigger>
+                            </Collapsible>
+                            {
+                                session?.user?.role === "ADMIN" && (
+                                    <Collapsible className="grid gap-2 mt-2">
+                                        <CollapsibleTrigger className="hover:bg-secondary px-3 py-2 rounded">
+                                            <SheetClose asChild>
+                                                <Link className="hover:bg-secondary rounded px-3 py-2" href="/dashboard/admin">
+                                                    Administration
+                                                </Link>
+                                            </SheetClose>
+                                        </CollapsibleTrigger>
+                                    </Collapsible>
+                                )
+                            }
                         </SheetContent>
                     </Sheet>
                 </div>
