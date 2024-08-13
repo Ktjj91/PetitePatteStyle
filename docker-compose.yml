@@ -3,8 +3,7 @@ services:
   postgres:
     image: postgres:latest
     environment:
-      POSTGRES_USER:
-
+      POSTGRES_USER: kingsley
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: petitepatte
     ports:
