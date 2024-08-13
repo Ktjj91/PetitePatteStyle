@@ -69,15 +69,15 @@ export default function Navigation({session}: NavigationProps) {
                 <NavigationMenu className="flex justify-between">
                     <NavigationMenuList>
                         <NavigationMenuItem>
-                            <NavigationMenuTrigger>Vêtements</NavigationMenuTrigger>
+                            <NavigationMenuTrigger>@</NavigationMenuTrigger>
                             <NavigationMenuContent>
-                                <div className="grid gap-2 lg:w-[300px]">
-                                    <Link legacyBehavior passHref href="/pull">
-                                        <NavigationMenuLink
-                                            className={`${navigationMenuTriggerStyle()} hover:bg-gray-300 w-[300px]`}>
-                                            Pull
-                                        </NavigationMenuLink>
-                                    </Link>
+                                <div className="grid gap-2 lg:w-[300px] w-full">
+                                        <Link  legacyBehavior passHref href="/pull">
+                                            <NavigationMenuLink
+                                                className={`${navigationMenuTriggerStyle()} hover:bg-gray-300 w-[300px]`}>
+                                                Pull
+                                            </NavigationMenuLink>
+                                        </Link>
                                     <Link className="hover:bg-gray-300 block" legacyBehavior passHref href="/tshirt">
                                         <NavigationMenuLink
                                             className={`${navigationMenuTriggerStyle()} hover:bg-gray-300 w-[300px]`}>T-shirt</NavigationMenuLink>

@@ -149,10 +149,6 @@ export default function DatableProduct({session}: DatableProductProps) {
     const handlePrevPage = () => {
         setCursor(null);
     };
-    const truncateDescription = (description, maxLength) => {
-        if (description.length <= maxLength) return description;
-        return description.slice(0, maxLength) + '...';
-    };
 
     return (
         <section className="p-3 flex flex-col justify-center items-center">
