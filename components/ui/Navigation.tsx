@@ -69,7 +69,7 @@ export default function Navigation({session}: NavigationProps) {
                 <NavigationMenu className="flex justify-between">
                     <NavigationMenuList>
                         <NavigationMenuItem>
-                            <NavigationMenuTrigger>@</NavigationMenuTrigger>
+                            <NavigationMenuTrigger>Vêtements</NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <div className="grid gap-2 lg:w-[300px] w-full">
                                         <Link  legacyBehavior passHref href="/pull">
