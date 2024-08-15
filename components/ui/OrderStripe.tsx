@@ -25,7 +25,7 @@ export default function OrderStripe({session}: SessionsProps) {
         }
     }
     useEffect(() => {
-        fetchDataOrderStripe();
+        fetchDataOrderStripe().then();
     }, []);
 
     if (ordersStripe.length === 0) return <p className="text-center  text-4xl text-center mt-3">Aucune commande

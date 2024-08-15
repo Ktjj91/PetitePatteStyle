@@ -19,7 +19,7 @@ export default function SuccessPage() {
     }
     useEffect(() => {
         if(token){
-            fetchSuccess();
+            fetchSuccess().then();
         }
 
     }, [token]);

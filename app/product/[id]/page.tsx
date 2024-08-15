@@ -30,7 +30,7 @@ export default function Page({params}: { params: { id: string } }) {
     }
     console.log(product)
     useEffect(() => {
-        fetchDataProduct();
+        fetchDataProduct().then();
     }, []);
 
     const onAddCart = () => {

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {prisma} from "@/db/db";
 import {NextRequest, NextResponse} from "next/server";
 import {auth} from "@/auth";

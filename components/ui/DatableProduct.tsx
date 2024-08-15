@@ -109,7 +109,7 @@ export default function DatableProduct({session}: DatableProductProps) {
 
     }
     useEffect(() => {
-        fetchData();
+        fetchData().then();
     }, [cursor]);
 
     const handleDelete = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -1,5 +1,6 @@
 # Utilise l'image officielle Nginx
 FROM nginx:latest
 
-# Copie le fichier de configuration personnalisé
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copie le répertoire de configuration personnalisé
+COPY conf.d /etc/nginx/conf.d
+

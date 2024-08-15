@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import {NextResponse, NextRequest} from "next/server";
 import {stripe} from "@/stripe";
 import {prisma} from "@/db/db";

@@ -1,0 +1,35 @@
+# Étape de construction
+FROM node:18 AS builder
+
+WORKDIR /usr/src/app
+
+# Copier les fichiers de package
+COPY package*.json ./
+RUN npm install
+
+# Copier le reste de l'application
+COPY . .
+
+# Générer les fichiers Prisma
+RUN npx prisma generate
+
+# Construire l'application
+RUN npm run build
+
+# Étape de production
+FROM node:18
+
+WORKDIR /usr/src/app
+
+# Copier les fichiers de construction depuis l'étape de construction
+COPY --from=builder /usr/src/app ./
+
+# Installer uniquement les dépendances nécessaires pour la production
+RUN npm install --production
+
+# Exposer le port de l'application
+EXPOSE 3000
+
+# Démarrer l'application
+CMD ["npm", "start"]
+

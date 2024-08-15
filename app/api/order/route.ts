@@ -1,9 +1,9 @@
-import {NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 import {prisma} from "@/db/db";
 import {auth} from "@/auth";
 
 
-export async function GET(request: NextResponse) {
+export async function GET(request: NextRequest) {
     const session = await auth();
     if(!session) return NextResponse.json({message: "Not authenticated"}, {status: 401});
     try {
