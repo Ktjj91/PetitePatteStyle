@@ -1,6 +1,6 @@
 import React from 'react'
 import {useProductStore} from "@/app/store";
-import Card from "@/components/ui/Card";
+import Card from "@/components/Card";
 
 export default function Galerie() {
     const products = useProductStore.use.products();

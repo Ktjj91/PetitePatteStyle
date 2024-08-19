@@ -1,5 +1,5 @@
 "use client";
-import Card from "@/components/ui/Card";
+import Card from "@/components/Card";
 import {useEffect, useState} from "react";
 import {ProductType} from "@/types/ProductType";
 

@@ -1,7 +1,7 @@
 "use client";
 import React, {useEffect, useState} from "react";
 import {ProductType} from "@/types/ProductType";
-import Card from "@/components/ui/Card";
+import Card from "@/components/Card";
 import Image from "next/image";
 
 export default function PullPage() {

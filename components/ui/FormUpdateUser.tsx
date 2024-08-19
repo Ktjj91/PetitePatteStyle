@@ -18,7 +18,6 @@ export default function FormUpdateUser({session,onUpdateUser} : FormUpdateUserPr
         try {
             form.set("id",String(session?.user?.id))
             form.set("name",name);
-            console.log(form)
             await fetch("/api/updateUser",{
                 method:"PUT",
                 body:form

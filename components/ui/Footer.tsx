@@ -54,6 +54,7 @@ export default function Footer() {
                     </li>
                     <li><Link className="hover:underline" href="/">Conditions Générales</Link></li>
                     <li><Link className="hover:underline" href="/">Gérer les cookies</Link></li>
+                    <li><Link className="hover:underline" href="/contact">Contactez-nous</Link></li>
                 </ul>
 
             </section>

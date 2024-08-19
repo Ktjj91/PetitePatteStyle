@@ -30,13 +30,16 @@ export default function OrderStripe({session}: SessionsProps) {
 
     if (ordersStripe.length === 0) return <p className="text-center  text-4xl text-center mt-3">Aucune commande
         effectuer</p>
+    console.log(ordersStripe);
 
     return (
         <>
             <div className="mt-3 mx-auto max-w-[1000px] w-full overflow-x-auto">
+                <h1 className="text-4xl text-center mb-3">Historique des commande</h1>
                 <table className="w-full table-auto text-center border border-gray-200">
                     <thead>
                     <tr>
+                        <th className="p-2">Numéro de commande</th>
                         <th className="p-2">Image</th>
                         <th className="p-2">Nom</th>
                         <th className="p-2">Prix unitaire</th>
@@ -51,6 +54,7 @@ export default function OrderStripe({session}: SessionsProps) {
                                 <tr className={`${
                                     itemIndex !== order.items.length - 1 ? 'border-none' : 'border-b border-gray-200'
                                 }`} key={`${orderIndex}-${itemIndex}`}>
+                                    <td className="p-2" >{order.id}</td>
                                     <td>
                                         <Image className="mx-auto" src={item.image} alt={item.name} width={50} height={50}/>
                                     </td>

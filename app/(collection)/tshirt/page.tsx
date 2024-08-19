@@ -1,7 +1,7 @@
 "use client";
 import {useEffect, useState} from "react";
 import {ProductType} from "@/types/ProductType";
-import Card from "@/components/ui/Card";
+import Card from "@/components/Card";
 
 export default function TshirtPage() {
     const [tshirtProduct, setTshirtProduct] = useState<ProductType[]>([]);

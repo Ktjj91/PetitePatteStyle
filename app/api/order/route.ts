@@ -21,7 +21,8 @@ export async function GET(request: NextRequest) {
                 take:10,
                 select:{
                     totalAmount:true,
-                    items:true
+                    items:true,
+                    id:true
                 }
             })
             return NextResponse.json({data:ordersUserStripe},{status:200});
