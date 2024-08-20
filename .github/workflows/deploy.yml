@@ -29,4 +29,4 @@ jobs:
 
       - name: Deploy to VPS 
         run: |
-          ssh kingsley@35.246.180.210 'cd /home/kingsley  && touch test_ci_cd.txt'
+          ssh kingsley@35.246.180.210 'cd /home/kingsley/PetitePatteStyle  && git pull'
