@@ -1,0 +1,32 @@
+name: Deploy on Push
+
+on:
+  push:
+    branches:
+      - main  # Change this to your main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create SSH directory
+        run: mkdir -p ~/.ssh
+
+      - name: Set up known_hosts
+        run: ssh-keyscan -t rsa 35.246.180.210 >> ~/.ssh/known_hosts
+
+      - name: Debug Known Hosts
+        run : cat ~/.ssh/known_hosts
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SRV_SSH_PRIVATE_KEY_KINGSLEY_GIT }}
+
+      - name: Deploy to VPS 
+        run: |
+          ssh kingsley@35.246.180.210 'cd /home/kingsley  && touch test_ci_cd.txt'

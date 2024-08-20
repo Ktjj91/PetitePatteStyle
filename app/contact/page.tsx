@@ -7,8 +7,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import {FormEvent, useState} from "react";
 import {useRouter} from "next/navigation";
+import type {Metadata} from "next";
 
-export default function Page() {
+
+
+export default function ContactPage() {
     const router = useRouter();
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");

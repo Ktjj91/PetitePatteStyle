@@ -1,27 +1,17 @@
-"use client";
-import Card from "@/components/Card";
-import {useEffect, useState} from "react";
-import {ProductType} from "@/types/ProductType";
+import React from 'react'
+import type {Metadata} from "next";
+import HarnaisPage from "@/app/(collection)/harnais/Harnais";
 
-export default function HarnaisPage() {
-    const [harnaisProduct, setHarnaisProduct] = useState<ProductType[]>([]);
-    const fetchHarnaisProduct = async () => {
-        const response = await fetch("api/collection/4");
-        if(!response.ok){
-            throw new Error('Failed to fetch data')
-        }
-        const {products} = await response.json();
-        setHarnaisProduct(products);
-    }
+export const metadata: Metadata = {
+    title: "Harnais pour chien | Petitepattestyle",
+    description: "Harnais pour chien de petite taille"
+};
 
-    useEffect(() => {
-        fetchHarnaisProduct()
-    }, []);
+
+export default function Page() {
     return (
-        <section className="grid grid-cols-1 md:grid-cols-4 mt-4 gap-3 p-5 ">
-            {harnaisProduct.map(harnais => (
-                <Card key={harnais.id} product={harnais}/>
-            ))}
-        </section>
+       <>
+           <HarnaisPage />
+       </>
     )
 }

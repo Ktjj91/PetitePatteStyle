@@ -7,7 +7,9 @@ interface ProductProps {
     product:ProductType
 }
 
+
 export default function Card({product} : ProductProps) {
+
     return (
        <>
            <Link  key={product.id} href={`/product/${product?.id}`}>
