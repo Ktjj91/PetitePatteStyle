@@ -27,6 +27,8 @@ services:
       DB_PASS: admin
       DB_NAME: petitepatte
       DATABASE_URL: postgres://kingsley:admin@postgres:5432/petitepatte
+      DNS: https://petitepattestyle.com
+
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
