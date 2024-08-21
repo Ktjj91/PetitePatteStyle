@@ -5,13 +5,16 @@ type Props = {
     params: { id: string };
 };
 
+const API_URL = process.env.DNS || 'http://localhost:3000';
+
+
 export async function generateMetadata(
     { params }: Props,
     parent: ResolvingMetadata
 ): Promise<Metadata> {
     const id = params.id;
 
-    const response = await fetch(`${process.env.DNS}/api/product/${id}`);
+    const response = await fetch(`${API_URL}/api/product/${id}`);
     const {product} = await response.json();
 
     return {
