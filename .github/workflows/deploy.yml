@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Create SSH directory
         run: mkdir -p ~/.ssh
@@ -29,4 +29,8 @@ jobs:
 
       - name: Deploy to VPS 
         run: |
-          ssh kingsley@35.246.180.210 'cd /home/kingsley/PetitePatteStyle  && git pull'
+          ssh kingsley@35.246.180.210 'cd /home/kingsley/PetitePatteStyle  && git pull && docker compose down && docker compose build && docker compose up -d'
+
+      - name: Verify Deployment
+        run: |
+          ssh kingsley@35.246.180.210 'docker ps'  # This verifies if the containers are up and running
