@@ -1,6 +1,7 @@
 export type OrderStripeType = {
     totalAmount:string,
     items:ItemOrder[]
+    id:number
 }
 
 export type ItemOrder = {
