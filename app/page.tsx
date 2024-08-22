@@ -5,10 +5,12 @@ import {useEffect} from "react";
 import {useProductStore} from "@/app/store";
 import Collection from "@/components/ui/Collection";
 
+const dns = process.env.NODE_ENV === 'production' ? "/api/products" : 'http://localhost:3000/api/products';
+
 export default function Home() {
     const setProducts = useProductStore.use.setProducts();
     const fetchData = async () => {
-        const response = await fetch(`${process.env.DNS || 'http://localhost:3000'}/api/products`);
+        const response = await fetch(dns);
         if (!response.ok) {
             throw new Error('Failed to fetch data')
         }
