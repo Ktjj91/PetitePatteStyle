@@ -7,7 +7,7 @@ type Props = {
 
 const dns = (id:string) => {
     if(process.env.NODE_ENV === 'production'){
-        return  `/api/product/${id}`;
+        return  `${process.env.DNS}/api/product/${id}`;
     }
     return  `http://localhost:3000/api/product/${id}`;
 }

@@ -81,6 +81,7 @@ export default function DatableProduct({session}: DatableProductProps) {
         const url = route === "UPDATE" ? "/api/updateProduct" : "/api/createProduct";
         const method = route === "UPDATE" ? 'PUT' : 'POST';
         try {
+            console.log(data);
             const response = await fetch(url, {
                 method: method,
                 body: data,
