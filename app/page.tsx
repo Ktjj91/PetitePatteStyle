@@ -10,12 +10,16 @@ const dns = process.env.NODE_ENV === 'production' ? "/api/products" : 'http://lo
 export default function Home() {
     const setProducts = useProductStore.use.setProducts();
     const fetchData = async () => {
-        const response = await fetch(dns);
-        if (!response.ok) {
-            throw new Error('Failed to fetch data')
+        try {
+            const response = await fetch(dns);
+            const {products} = await response.json();
+            setProducts(products);
+
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
-        const {products} = await response.json();
-        setProducts(products);
+
     }
     useEffect(() => {
         fetchData().then();

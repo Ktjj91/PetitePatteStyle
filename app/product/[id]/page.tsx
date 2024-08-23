@@ -5,7 +5,12 @@ type Props = {
     params: { id: string };
 };
 
-const API_URL = process.env.DNS || 'http://localhost:3000';
+const dns = (id:string) => {
+    if(process.env.NODE_ENV === 'production'){
+        return  `/api/product/${id}`;
+    }
+    return  `http://localhost:3000/api/product/${id}`;
+}
 
 
 export async function generateMetadata(
@@ -14,7 +19,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
     const id = params.id;
 
-    const response = await fetch(`${API_URL}/api/product/${id}`);
+    const response = await fetch(dns(id));
     const {product} = await response.json();
 
     return {
@@ -26,10 +31,10 @@ export async function generateMetadata(
 
 export default  async function Page({params}: { params: { id: string } }) {
     const response = await fetch(`${process.env.DNS}/api/product/${params.id}`);
-    const product = await response.json();
+    const {product} = await response.json();
     return (
        <>
-           <PageProduct id={params.id} items={product} />
+           <PageProduct product={product} />
        </>
     )
 }

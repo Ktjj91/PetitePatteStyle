@@ -3,7 +3,7 @@ import type {Metadata} from "next";
 
 export const metadata: Metadata = {
     title: "Histoire Petitepattestyle",
-    description: "Voici l'histoire de Petitepattestyle qui ",
+    description: "Voici l'histoire de Petitepattestyle",
 };
 
 

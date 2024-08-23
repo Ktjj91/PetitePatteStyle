@@ -7,15 +7,18 @@ import {ProductType} from "@/types/ProductType";
 export default function CollierPage() {
     const [collierProduct, setCollierProduct] = useState<ProductType[]>([]);
      const fetchCollierProduct = async () => {
-         const response = await fetch("api/collection/3");
-         if(!response.ok){
-             throw new Error('Failed to fetch data')
+         try {
+             const response = await fetch("api/collection/3");
+             const {products} = await response.json();
+             setCollierProduct(products);
+         } catch (error) {
+             console.error(error);
+             throw error;
          }
-         const {products} = await response.json();
-         setCollierProduct(products);
+
      }
     useEffect(() => {
-        fetchCollierProduct()
+        fetchCollierProduct().then()
     }, []);
     return (
         <section className="grid grid-cols-1 md:grid-cols-4 mt-4 gap-3 p-5 ">
