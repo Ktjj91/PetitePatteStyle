@@ -5,6 +5,8 @@ import {Button} from "@/components/ui/button";
 import {FormEvent, useEffect, useState} from "react";
 import {Session} from "next-auth";
 import {formData} from "zod-form-data";
+import {signIn} from "next-auth/react";
+
 
 interface FormUpdateUserProps  {
     session:Session | null;
@@ -12,6 +14,8 @@ interface FormUpdateUserProps  {
 }
 export default function FormUpdateUser({session,onUpdateUser} : FormUpdateUserProps) {
     const [name, setName] = useState<string>(session?.user?.name || "");
+
+
     const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const form = new FormData(e.currentTarget);
@@ -22,8 +26,10 @@ export default function FormUpdateUser({session,onUpdateUser} : FormUpdateUserPr
                 method:"PUT",
                 body:form
             })
+            await signIn("google",{redirect:false})
         } catch (e) {
-            console.log(e)
+            console.error(e)
+            throw e;
         }
 
     }

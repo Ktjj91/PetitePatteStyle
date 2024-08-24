@@ -1,6 +1,9 @@
 import {auth} from "@/auth";
 import FormUpdateUser from "@/components/ui/FormUpdateUser";
 import {redirect} from "next/navigation";
+import {signIn} from "next-auth/react";
+
+const dns = process.env.NODE_ENV === 'production' ? `${process.env.DNS}/api/updateUser` : 'http://localhost:3000/api/updateUser';
 
 
 export default async function SettingsPage() {
@@ -9,15 +12,14 @@ export default async function SettingsPage() {
     const updateUser = async (formData: FormData) => {
         "use server"
         try {
-
-            await fetch("http://localhost:3000/api/updateUser", {
+            await fetch(dns, {
                 method: "PUT",
                 body: formData,
             })
+            await signIn("google",{redirect:false});
         } catch (error) {
-            console.log("error : ", error);
+            console.error("error : ", error);
             throw new Error("Erreur lors de la modification de l'utilisateur")
-
         }
         finally {
             redirect("/dashboard/settings");

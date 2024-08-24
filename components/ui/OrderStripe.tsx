@@ -3,7 +3,6 @@ import {useState, useEffect} from "react";
 import {Session} from "next-auth";
 import {ItemOrder, OrderStripeType} from "@/types/OrderStripeType";
 import Image from "next/image";
-import Link from "next/link";
 
 interface SessionsProps {
     session: Session | null
@@ -11,6 +10,7 @@ interface SessionsProps {
 
 export default function OrderStripe({session}: SessionsProps) {
     const userId = session?.user.id;
+
 
     const [ordersStripe, setOrdersStripe] = useState<OrderStripeType[]>([]);
     const fetchDataOrderStripe = async () => {
@@ -30,7 +30,7 @@ export default function OrderStripe({session}: SessionsProps) {
 
     if (ordersStripe.length === 0) return <p className="text-center  text-4xl text-center mt-3">Aucune commande
         effectuer</p>
-    console.log(ordersStripe);
+    console.log(ordersStripe)
 
     return (
         <>

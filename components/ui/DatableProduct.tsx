@@ -81,14 +81,13 @@ export default function DatableProduct({session}: DatableProductProps) {
         const url = route === "UPDATE" ? "/api/updateProduct" : "/api/createProduct";
         const method = route === "UPDATE" ? 'PUT' : 'POST';
         try {
-            console.log(data);
             const response = await fetch(url, {
                 method: method,
                 body: data,
             });
             if (response.ok) {
                 console.log('Form submitted successfully');
-                fetchData();
+                fetchData().then();
             } else {
                 console.error('Form submission failed');
             }
@@ -141,6 +140,7 @@ export default function DatableProduct({session}: DatableProductProps) {
             categorie: product.categoriesId,
         });
     };
+
 
     const handleNextPage = () => {
         if (products.length > 0) {

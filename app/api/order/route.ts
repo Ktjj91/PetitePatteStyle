@@ -5,12 +5,12 @@ import {auth} from "@/auth";
 
 export async function GET(request: NextRequest) {
     const session = await auth();
-    if(!session) return NextResponse.json({message: "Not authenticated"}, {status: 401});
+    // if(!session) return NextResponse.json({message: "Not authenticated"}, {status: 401});
     try {
         const sessionUserId = Number(session?.user.id);
         const {searchParams} = new URL(request.url);
         const userId = Number(searchParams.get("id"));
-        if(userId === sessionUserId){
+        // if(userId === sessionUserId){
             const ordersUserStripe = await prisma.orderStripe.findMany({
                 where:{
                     userId:userId
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
                 }
             })
             return NextResponse.json({data:ordersUserStripe},{status:200});
-        }
+        // }
         return NextResponse.json({data:"User not authorized"},{status:404});
 
     } catch (error) {
