@@ -6,7 +6,6 @@ import Navigation from "@/components/ui/Navigation";
 import Footer from "@/components/ui/Footer";
 import {auth} from "@/auth";
 
-
 const fontSans = FontSans({subsets: ["latin"], variable: "--font-sans"});
 
 export const metadata: Metadata = {

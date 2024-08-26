@@ -5,6 +5,7 @@ import {useEffect} from "react";
 import {useProductStore} from "@/app/store";
 import Collection from "@/components/ui/Collection";
 
+
 const dns = process.env.NODE_ENV === 'production' ? "/api/products" : 'http://localhost:3000/api/products';
 
 export default function Home() {

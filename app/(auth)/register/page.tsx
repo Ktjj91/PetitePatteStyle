@@ -10,7 +10,7 @@ import {useState, useTransition} from "react";
 import {signInWithGoogle} from "@/actions/loginGoogle";
 import {signInWitFacebook} from "@/actions/loginFacebook";
 import {useForm} from "react-hook-form";
-import {LoginSchema, RegisterSchema} from "@/schemas";
+import { RegisterSchema} from "@/schemas";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod"
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form"
@@ -19,7 +19,6 @@ import FormSucess from "@/components/form-sucess";
 import Link from "next/link";
 import {register} from "@/actions/register";
 import {signInWithCredentials} from "@/actions/credentials";
-import {applyNextWorkerFixture} from "next/dist/experimental/testmode/playwright/next-worker-fixture";
 
 
 export default function Register() {

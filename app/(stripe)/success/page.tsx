@@ -7,17 +7,19 @@ export default function SuccessPage() {
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
     const [customerData, setCustomerData] = useState<any>(null);
-    const fetchSuccess = async () => {
-        try {
-            const response = await fetch(`api/success?token=${token}`)
-            const data = await response.json();
-            setCustomerData(data);
-        } catch (error) {
-            console.error(error);
-        }
 
-    }
     useEffect(() => {
+        const fetchSuccess = async () => {
+            try {
+                const response = await fetch(`api/success?token=${token}`)
+                const data = await response.json();
+                setCustomerData(data);
+            } catch (error) {
+                console.error(error);
+                throw error;
+            }
+
+        }
         if(token){
             fetchSuccess().then();
         }

@@ -2,6 +2,7 @@ import Logo from "@/public/petitepattestyle.png"
 import Image from "next/image";
 import instagramLogo from "@/public/instagram.png"
 import Link from "next/link"
+import Axeptio from "@/components/Axeptio";
 
 export default function Footer() {
     return (
@@ -64,6 +65,7 @@ export default function Footer() {
                     <Image className=" mx-auto mt-2" width={18} src={instagramLogo} alt="logo instagram"/>
                 </Link>
             </section>
+            <Axeptio />
         </footer>
     )
 }
