@@ -2,7 +2,7 @@
 import bcrypt from "bcryptjs"
 import {getUserByEmail} from "@/data/db";
 import {prisma} from "@/db/db";
-import {LoginSchema, RegisterSchema} from "@/schemas";
+import {RegisterSchema} from "@/schemas";
 import * as z from "zod"
 import {stripe} from "@/stripe";
 export const register = async (values:z.infer<typeof RegisterSchema>) => {

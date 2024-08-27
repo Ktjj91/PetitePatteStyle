@@ -1,6 +1,14 @@
 import {prisma} from "@/db/db";
 import { NextResponse } from 'next/server'
-
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     description: Return 6 products in the database
+ *     responses:
+ *       200:
+ *         description: Success !
+ */
 export async function GET(request: Request) {
     try {
         const products = await prisma.products.findMany({
