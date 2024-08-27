@@ -4,6 +4,81 @@ import {prisma} from "@/db/db";
 import {NextResponse} from "next/server";
 import {auth} from "@/auth";
 
+/**
+ * @swagger
+ * /api/createProduct:
+ *   post:
+ *     summary: Create a new product
+ *     description: This endpoint allows an admin to create a new product by providing necessary details like name, description, quantity, price, image, and category.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the product
+ *                 example: "Product Name"
+ *               description:
+ *                 type: string
+ *                 description: The description of the product
+ *                 example: "This is a detailed description of the product."
+ *               quantity:
+ *                 type: integer
+ *                 description: The quantity of the product available
+ *                 example: 10
+ *               price:
+ *                 type: number
+ *                 format: float
+ *                 description: The price of the product
+ *                 example: 19.99
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: The image file for the product
+ *               categorie:
+ *                 type: integer
+ *                 description: The ID of the category the product belongs to
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Product successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Success!"
+ *       401:
+ *         description: Not authenticated or unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Not authenticated"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "An error occurred"
+ */
+
+
 export const POST = auth( async function POST(request) {
     if (request.auth?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
     try {

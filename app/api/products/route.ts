@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
  * @swagger
  * /api/products:
  *   get:
+ *     summary: Retrieve 6 product
  *     description: Return 6 products in the database
  *     responses:
  *       200:

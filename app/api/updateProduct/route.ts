@@ -4,6 +4,94 @@ import {NextResponse} from "next/server";
 import {writeFile} from "node:fs/promises";
 import {auth} from "@/auth";
 
+/**
+ * @swagger
+ * /api/updateProduct:
+ *   put:
+ *     summary: Update an existing product
+ *     description: This endpoint allows an admin to update the details of an existing product by providing the product ID and the updated details such as name, description, price, quantity, category, and image.
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: The ID of the product to update
+ *                 example: 1
+ *               name:
+ *                 type: string
+ *                 description: The new name of the product
+ *                 example: "Updated Product Name"
+ *               description:
+ *                 type: string
+ *                 description: The new description of the product
+ *                 example: "This is the updated product description."
+ *               price:
+ *                 type: number
+ *                 format: float
+ *                 description: The new price of the product
+ *                 example: 29.99
+ *               quantity:
+ *                 type: integer
+ *                 description: The new quantity of the product available
+ *                 example: 50
+ *               categorie:
+ *                 type: integer
+ *                 description: The ID of the category to which the product belongs
+ *                 example: 2
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: The new image file for the product (optional)
+ *     responses:
+ *       200:
+ *         description: Product successfully updated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Success!"
+ *       401:
+ *         description: Not authenticated or unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Not authenticated"
+ *       404:
+ *         description: Product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Product not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "An error occurred"
+ */
+
 
 export async function PUT(request:Request) {
     const session = await auth();
