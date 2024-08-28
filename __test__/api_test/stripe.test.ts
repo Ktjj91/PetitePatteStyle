@@ -1,8 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { POST } from "@/app/api/stripe/route"; // Adapte le chemin d'importation
+import { POST } from "@/app/api/stripe/route";
 import { stripe } from "@/stripe";
 import { prisma } from "@/db/db";
-import { auth } from "@/auth";
 import {NextRequest} from "next/server";
 
 vi.mock("@/stripe", () => ({
@@ -62,7 +61,6 @@ describe('POST /api/checkout', () => {
 
         // @ts-ignore
         const response = await POST(mockRequest);
-
         expect(stripe.checkout.sessions.create).toHaveBeenCalled();
         expect(prisma.orderStripe.create).toHaveBeenCalled();
         // @ts-ignore
