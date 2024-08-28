@@ -50,6 +50,7 @@
     "swagger-ui-react": "^5.17.14",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "tarteaucitronjs": "^1.19.0",
     "update": "^0.7.4",
     "zod": "^3.23.8",
     "zod-form-data": "^2.0.2",

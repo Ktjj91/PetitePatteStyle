@@ -24,8 +24,8 @@ export default function Home() {
     }
     useEffect(() => {
         fetchData().then();
-    }, []);
 
+    }, []);
 
     return (
         <main className="flex-grow">
