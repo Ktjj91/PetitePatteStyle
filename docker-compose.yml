@@ -98,18 +98,18 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
 
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/certs:/etc/letsencrypt
-    depends_on:
-      - nextjs
+#  nginx:
+#    build:
+#      context: ./nginx
+#      dockerfile: Dockerfile
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./nginx/conf.d:/etc/nginx/conf.d
+#      - ./nginx/certs:/etc/letsencrypt
+#    depends_on:
+#      - nextjs
 
   pgadmin:
     image: dpage/pgadmin4

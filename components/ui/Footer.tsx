@@ -65,7 +65,6 @@ export default function Footer() {
                     <Image className=" mx-auto mt-2" width={18} src={instagramLogo} alt="logo instagram"/>
                 </Link>
             </section>
-            <Axeptio />
         </footer>
     )
 }

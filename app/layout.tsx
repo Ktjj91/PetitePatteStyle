@@ -7,6 +7,7 @@ import Footer from "@/components/ui/Footer";
 import {auth} from "@/auth";
 
 const fontSans = FontSans({subsets: ["latin"], variable: "--font-sans"});
+import Script from "next/script";
 
 export const metadata: Metadata = {
     title: "PetitePatteStyle",
@@ -26,6 +27,28 @@ export default async function RootLayout({children}: Readonly<{
         <Navigation session={session}/>
         {children}
         <Footer/>
+        <Script id="axeptio-script" strategy="afterInteractive">
+            {`
+            window.axeptioSettings = {
+              clientId: "66cc916e20eb305e04aaeefe",
+              cookiesVersion: "petitepattestyle-fr-EU",
+              googleConsentMode: {
+                default: {
+                  analytics_storage: "denied",
+                  ad_storage: "denied",
+                  ad_user_data: "denied",
+                  ad_personalization: "denied",
+                  wait_for_update: 500
+                        }
+                      }
+                    };
+                   (function(d, s) {
+                      var t = d.getElementsByTagName(s)[0], e = d.createElement(s);
+                      e.async = true; e.src = "//static.axept.io/sdk.js";
+                      t.parentNode.insertBefore(e, t);
+                    })(document, "script");
+            `}
+        </Script>
         </body>
         </html>
     );
