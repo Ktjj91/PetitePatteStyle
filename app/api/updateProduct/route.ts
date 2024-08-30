@@ -92,12 +92,20 @@ import {auth} from "@/auth";
  *                   example: "An error occurred"
  */
 
-
+/**
+ * Handler pour la méthode HTTP PUT. Met à jour les informations d'un produit dans la base de données.
+ *
+ * @async
+ * @function PUT
+ * @param {Request} request - L'objet Request provenant de la requête HTTP.
+ * @returns {Promise<Response>} La réponse HTTP, sous forme de JSON.
+ */
 export async function PUT(request:Request) {
     const session = await auth();
     if (session?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
 
     try {
+        // Récupère les données du formulaire envoyées dans la requête
         const formData = await request.formData();
         const id = Number(formData.get('id'));
         const name = formData.get('name') as string;
@@ -105,7 +113,7 @@ export async function PUT(request:Request) {
         const price = formData.get('price') as string;
         const quantity = Number(formData.get('quantity'));
         const categorie = Number(formData.get('categorie'));
-
+        // Gestion de l'image si elle est présente
         const imageFile = formData.get('image') ;
         let imagePath = null;
 
@@ -118,9 +126,11 @@ export async function PUT(request:Request) {
             await writeFile(fullPath, buffer);
 
         }
+        // Recherche du produit existant dans la base de données
         const product = await prisma.products.findUnique({
             where:{id:id}
         })
+        // Mise à jour du produit dans la base de données
         const updateProduct = await prisma.products.update({
             where: {id: id},
             data: {

@@ -30,6 +30,26 @@ interface DatableProductProps {
 
 }
 
+/**
+ * Interface représentant les catégories des produits.
+ * @typedef {Object} Categories
+ * @property {string} id - L'identifiant de la catégorie.
+ * @property {string} name - Le nom de la catégorie.
+ */
+
+/**
+ * Interface représentant les props du composant DatableProduct.
+ * @typedef {Object} DatableProductProps
+ * @property {Session|null} session - La session de l'utilisateur connecté.
+ */
+
+/**
+ * Composant de gestion des produits pour les administrateurs.
+ * Permet de créer, modifier, et supprimer des produits, ainsi que de naviguer entre les pages de produits.
+ *
+ * @param {DatableProductProps} props - Les props passées au composant.
+ * @returns {JSX.Element} Le composant de gestion des produits.
+ */
 export default function DatableProduct({session}: DatableProductProps) {
     const router = useRouter();
     if (session?.user?.role !== "ADMIN") router.push('/dashboard/settings');
@@ -56,6 +76,10 @@ export default function DatableProduct({session}: DatableProductProps) {
         3: "Collier",
         4: "Harnais"
     }
+    /**
+     * Gère les modifications des champs de formulaire.
+     * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} e - L'événement de changement.
+     */
     const handleChange = (e: any) => {
         const {name, value, files} = e.target;
         if (name === 'image') {
@@ -64,9 +88,19 @@ export default function DatableProduct({session}: DatableProductProps) {
             setFormData((prevData) => ({...prevData, [name]: value}));
         }
     };
+    /**
+     * Gère le changement de catégorie via le sélecteur.
+     * @param {string} value - La nouvelle valeur sélectionnée.
+     */
     const handleSelectChange = (value: string) => {
         setFormData((prevData) => ({...prevData, categorie: value}));
     };
+
+    /**
+     * Gère la soumission du formulaire pour créer ou mettre à jour un produit.
+     * @param {React.FormEvent<HTMLFormElement>} e - L'événement de soumission du formulaire.
+     * @param {"UPDATE" | "CREATE"} route - La route à utiliser pour la requête (mise à jour ou création).
+     */
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, route: "UPDATE" | "CREATE") => {
         const data = new FormData();
         data.append('id', formData.id);
@@ -111,7 +145,10 @@ export default function DatableProduct({session}: DatableProductProps) {
     useEffect(() => {
         fetchData().then();
     }, [cursor]);
-
+    /**
+     * Gère la suppression d'un produit.
+     * @param {React.FormEvent<HTMLFormElement>} e - L'événement de soumission du formulaire.
+     */
     const handleDelete = async (e: React.FormEvent<HTMLFormElement>) => {
         const formData = new FormData(e.currentTarget);
         const id = Number(formData.get('id'));
@@ -129,6 +166,10 @@ export default function DatableProduct({session}: DatableProductProps) {
             console.error("Échec de la suppression du produit :", error);
         }
     };
+    /**
+     * Prépare les données du formulaire pour la modification d'un produit.
+     * @param {any} product - Les données du produit à modifier.
+     */
     const handleEdit = (product: any) => {
         setFormData({
             id: product.id,

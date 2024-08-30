@@ -78,7 +78,16 @@ import {auth} from "@/auth";
  *                   example: "An error occurred"
  */
 
-
+/**
+ * Gestionnaire pour la méthode HTTP POST.
+ * Permet de créer un nouveau produit dans la base de données et d'enregistrer l'image associée sur le système de fichiers.
+ * Cette action est réservée aux utilisateurs ayant le rôle d'administrateur.
+ *
+ * @async
+ * @function POST
+ * @param {NextRequest} request - L'objet représentant la requête HTTP entrante.
+ * @returns {Promise<NextResponse>} L'objet réponse contenant un message de succès ou d'erreur.
+ */
 export const POST = auth( async function POST(request) {
     if (request.auth?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
     try {

@@ -24,6 +24,18 @@ import { NextResponse } from 'next/server'
  *       404:
  *         description: Item not found
  */
+
+/**
+ * Gestionnaire pour la méthode HTTP GET.
+ * Récupère les produits appartenant à une catégorie spécifique identifiée par son ID.
+ *
+ * @async
+ * @function GET
+ * @param {Request} request - L'objet représentant la requête HTTP entrante.
+ * @param {Object} params - Un objet contenant les paramètres de la requête.
+ * @param {string} params.id - L'identifiant de la catégorie dont les produits doivent être récupérés.
+ * @returns {Promise<NextResponse>} L'objet réponse contenant la liste des produits ou une redirection en cas d'erreur.
+ */
 export async function GET(request: Request,{params}:{params:{id:string}}) {
 
     try {

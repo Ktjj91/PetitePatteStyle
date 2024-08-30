@@ -66,6 +66,16 @@ import {auth} from "@/auth";
  *                   type: string
  *                   example: "An error occurred"
  */
+/**
+ * Gestionnaire pour la méthode HTTP DELETE.
+ * Supprime un produit de la base de données et son image associée du système de fichiers.
+ * Cette action est réservée aux utilisateurs ayant le rôle d'administrateur.
+ *
+ * @async
+ * @function DELETE
+ * @param {NextRequest} request - L'objet représentant la requête HTTP entrante.
+ * @returns {Promise<NextResponse>} L'objet réponse contenant un message de succès ou d'erreur.
+ */
 export const DELETE = auth(async function DELETE(request) {
     if (request.auth?.user?.role !== "ADMIN") return NextResponse.json({message: "Not authenticated"}, {status: 401})
     try {

@@ -5,15 +5,25 @@ import {stripe} from "@/stripe";
 import {prisma} from "@/db/db";
 import {auth} from "@/auth";
 
-
+/**
+ * Handler pour la méthode HTTP POST.
+ * Crée une session de paiement Stripe, enregistre la commande dans la base de données et met à jour les quantités de produits.
+ * Cette route est protégée par une authentification.
+ *
+ * @async
+ * @function POST
+ * @param {NextRequest} request - L'objet de la requête HTTP provenant de Next.js.
+ * @returns {Promise<NextResponse>} La réponse HTTP, sous forme de JSON.
+ */
 export const POST = auth(async function POST(request: NextRequest) {
     if (!request.auth) return NextResponse.json({message: "Not authenticated"}, {status: 401});
 
     try {
         const data: any = await request.json();
         const items = data.items;
+        // Calcule le montant total de la commande
         const totalAmount = items.reduce((total: number, item: any) => total + item.price * item.quantity, 0);
-
+        // Crée les éléments de ligne pour la session de paiement Stripe
         const line_items = items.map((item: any) => ({
             price_data: {
                 currency: 'eur',
@@ -25,7 +35,7 @@ export const POST = auth(async function POST(request: NextRequest) {
             },
             quantity: item.quantity,
         }));
-
+        // Crée une session de paiement Stripe
         const checkoutSession = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             billing_address_collection: 'auto',
@@ -38,6 +48,7 @@ export const POST = auth(async function POST(request: NextRequest) {
             cancel_url: "http://localhost:3000/cancel",
             line_items
         })
+        // Enregistre la commande dans la base de données si la session de paiement a été créée
         if (checkoutSession) {
             await prisma.orderStripe.create({
                 data: {
@@ -59,7 +70,8 @@ export const POST = auth(async function POST(request: NextRequest) {
                     }
                 }
             });
-             items.map(async (item:any) => {
+            // Met à jour les quantités des produits dans la base de données
+            items.map(async (item:any) => {
                  await prisma.products.update({
                      where:{id:item.id},
                      data:{

@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+1. Introduction et Contexte du Projet
+    Objectif du projet : Création du site ecommerce Petitepattestyle
+2. Contexte : Le but du projet et la création d'un site ecommerce avec Next.js
 
-First, run the development server:
+2. Architecture du Système
 
+.Vue d'ensemble : Pour la technologie Petitepattestyle utilise Next.js et sa technologie Api route et pour la bdd psql et Prisma.
+Environnement de Développement: 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## TESTER SON CODE :
+```bash
+npm run lint
+npm run test
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Docker
+Commande Docker pour build le project :
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+docker compose build
+docker compose up -d 
+```
 
-## Learn More
+## Env 
+Changez les variable du point env pour vos provider ...
 
-To learn more about Next.js, take a look at the following resources:
+AUTH_SECRET=
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
+DATABASE_URL
+AUTH_FACEBOOK_ID=
+AUTH_FACEBOOK_SECRET=
+STRIPE_SECRET_KEY=
+AUTH_TRUST_HOST=
+RESEND_API_KEY=
+DNS=
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy on Production
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Avec un simple push deployez directement le code sur la production grâce au Github Action
 
-## Deploy on Vercel
+## DOCUMENTATION API 
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+La documentation de l’API est générée avec Swagger et est accessible via la route /api-doc.
