@@ -38,6 +38,7 @@ declare module "next-auth/jwt" {
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
     adapter: PrismaAdapter(prisma),
+    trustHost:true,
     pages: {
         signIn: '/sign-in',
     },
