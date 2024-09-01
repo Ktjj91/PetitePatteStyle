@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react'
 import Link from 'next/link'
 
@@ -17,8 +18,9 @@ export default function PolitiquePage() {
                 <li>Sur la politique du site en matière de cookies.</li>
             </ul>
             <p>Cette politique complète les mentions légales et les Conditions Générales d’Utilisation consultables par les utilisateurs à l’adresse suivante :
-                <Link href="/cgu" className="text-blue-500" > Conditions Générales d’utilisation</Link>
-                <Link href="/mention"  className="text-blue-500"> mentions Légales</Link>
+                <Link href="/cgu" className="text-blue-500 hover:underline" > Conditions Générales d’utilisation</Link><br/>
+
+                <Link href="/mt"   className="text-blue-500 hover:underline"> mentions Légales</Link>
             </p>
 
             <h3 className="mt-3">ARTICLE 2 : PRINCIPES RELATIFS À LA COLLECTE ET AU TRAITEMENT DES DONNÉES PERSONNELLES</h3>

@@ -53,8 +53,11 @@ export default function Footer() {
                     <li className="hover:underline">
                         <Link href="/politique">Politique de confidentialité & cookies</Link>
                     </li>
-                    <li><Link className="hover:underline" href="/">Conditions Générales</Link></li>
+                    <li><Link className="hover:underline" href="/cgv">Conditions Générales</Link></li>
                     <li><Link className="hover:underline" href="/contact">Contactez-nous</Link></li>
+                    <li><Link className="hover:underline" href="/mt">Mention légale</Link></li>
+                    <li><Link className="hover:underline" href="/cgu">CGU</Link></li>
+                    <li><Link className="hover:underline" href="/cgv">CGV</Link></li>
                 </ul>
 
             </section>
