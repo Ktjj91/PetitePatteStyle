@@ -19,31 +19,34 @@ export default function Footer() {
                 <h3 className="font-bold">Navigation</h3>
                 <ul className="flex flex-col items-center">
                     <li className="hover:underline">
-                        <Link href="/">
+                        <Link href="/histoire">
                             Notre histoire
                         </Link>
                     </li>
                     <li>
                     </li>
                     <li>
-                        <Link className="hover:underline" href="/">
+                        <Link className="hover:underline" href="/pull">
                             Pull
                         </Link>
                     </li>
                     <li className="hover:underline">
-                        <Link href="/">
+                        <Link href="/tshirt">
                             T-shirt
                         </Link>
                     </li>
                     <li className="hover:underline">
-                        <Link href="/">
+                        <Link href="/collier">
                             Collier
                         </Link>
                     </li>
                     <li className="hover:underline">
-                        <Link href="/">
+                        <Link href="/harnais">
                             Harnais
                         </Link>
+                    </li>
+                    <li>
+                        <a className="text-black font-bold hover:underline" href="https://amzn.to/477OR7m">Amazon Associate</a>
                     </li>
                 </ul>
             </section>
