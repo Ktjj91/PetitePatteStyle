@@ -40,6 +40,10 @@ COPY --from=builder /app/public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
+# Set permissions for the items directory
+RUN chown -R nextjs:nodejs ./public/items
+RUN chmod -R 775 ./public/items
+
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./

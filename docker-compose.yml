@@ -30,6 +30,8 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+      - /home/kingsley/PetitePatteStyle/public/items:/usr/src/app/public/items
+
   adminer:
     image: adminer
     ports:
