@@ -51,17 +51,16 @@ export default function Footer() {
                 <h2 className="font-bold">Informations</h2>
                 <ul className=" flex flex-col items-center">
                     <li className="hover:underline">
-                        <Link href="/">Politique de confidentialité & cookies</Link>
+                        <Link href="/politique">Politique de confidentialité & cookies</Link>
                     </li>
                     <li><Link className="hover:underline" href="/">Conditions Générales</Link></li>
-                    <li><Link className="hover:underline" href="/">Gérer les cookies</Link></li>
                     <li><Link className="hover:underline" href="/contact">Contactez-nous</Link></li>
                 </ul>
 
             </section>
             <section className="text-sm m-2">
                 <h2 className="font-bold text-center">Réseaux sociaux</h2>
-                <Link href="/">
+                <Link href="https://www.instagram.com/petitepattestyle/">
                     <Image className=" mx-auto mt-2" width={18} src={instagramLogo} alt="logo instagram"/>
                 </Link>
             </section>
