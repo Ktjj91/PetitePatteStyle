@@ -32,6 +32,8 @@ import {FaTrash} from "react-icons/fa";
 interface NavigationProps {
     session?: Session | null
 }
+const dns = process.env.NODE_ENV === 'production' ? "/api/stripe" : 'http://localhost:3000/api/stripe';
+
 
 export default function Navigation({session}: NavigationProps) {
     const products = useCartProduct.use.products();
@@ -41,19 +43,25 @@ export default function Navigation({session}: NavigationProps) {
     const incrementQuantity = useCartProduct.use.incrementQuantity();
     const removeCart = useCartProduct.use.removeFromCart();
     const onPayment = async () => {
-        const response = await fetch('http://localhost:3000/api/stripe', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                stripeCustomerId: session?.user.stripeCustomerId,
-                items: products,
-                userId: session?.user.id
+        try {
+            const response = await fetch(dns, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    stripeCustomerId: session?.user.stripeCustomerId,
+                    items: products,
+                    userId: session?.user.id
+                })
             })
-        })
-        const data = await response.json();
-        window.location.href = data.url
+            const data = await response.json();
+            window.location.href = data.url
+        } catch (e){
+            console.error(e);
+            throw e;
+        }
+
 
     }
 
