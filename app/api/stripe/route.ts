@@ -15,8 +15,6 @@ import {auth} from "@/auth";
  * @param {NextRequest} request - L'objet de la requête HTTP provenant de Next.js.
  * @returns {Promise<NextResponse>} La réponse HTTP, sous forme de JSON.
  */
-const successDns = process.env.NODE_ENV === 'production' ? `https://petitepattestyle.com/success?token=${data?.stripeCustomerId}` : `http://localhost:3000/success?token=${data?.stripeCustomerId}`;
-const cancelDns = process.env.NODE_ENV === 'production' ? `https://petitepattestyle.com/cancel` : `http://localhost:3000/cancel`;
 export const POST = auth(async function POST(request: NextRequest) {
     if (!request.auth) return NextResponse.json({message: "Not authenticated"}, {status: 401});
 
@@ -46,8 +44,8 @@ export const POST = auth(async function POST(request: NextRequest) {
             },
             customer: data?.stripeCustomerId,
             mode: "payment",
-            success_url: successDns,
-            cancel_url: cancelDns,
+            success_url: `https://petitepattestyle.com/success?token=${data?.stripeCustomerId}`,
+            cancel_url: "https://petitepattestyle.com/cancel",
             line_items
         })
         // Enregistre la commande dans la base de données si la session de paiement a été créée
