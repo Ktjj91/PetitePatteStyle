@@ -29,7 +29,7 @@ jobs:
 
       - name: Deploy to VPS 
         run: |
-          ssh kingsley@35.246.180.210 'cd /home/kingsley/PetitePatteStyle && git reset --hard HEAD && git clean -fd && git pull && docker compose down && docker compose build && docker compose up -d'
+          ssh kingsley@35.246.180.210 'cd /home/kingsley/PetitePatteStyle  && git pull && docker compose down && docker compose build && docker compose up -d'
 
       - name: Verify Deployment
         run: |
