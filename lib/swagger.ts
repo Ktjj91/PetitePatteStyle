@@ -12,7 +12,7 @@ export const getApiDocs = async () => {
             components: {
                 securitySchemes: {
                     BearerAuth: {
-                        type: "https",
+                        type: "http",
                         scheme: "bearer",
                         bearerFormat: "JWT",
                     },
@@ -21,5 +21,6 @@ export const getApiDocs = async () => {
             security: [],
         },
     });
+    console.log(JSON.stringify(spec, null, 2));  // Affichez le spec pour vérifier son contenu
     return spec;
 };
