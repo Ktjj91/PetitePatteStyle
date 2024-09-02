@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-   output: 'standalone',
+    swcMinify: false,
+    output: 'standalone',
     eslint: {
         ignoreDuringBuilds: true,
 
