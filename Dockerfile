@@ -1,5 +1,5 @@
 # Base image
-FROM node:22-alpine AS base
+FROM node:18-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -35,19 +35,20 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/app ./app
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Set permissions for the items directory
-RUN chown -R nextjs:nodejs ./public/items
-RUN chmod -R 775 ./public/items
-
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Set permissions for the items directory
+RUN chown -R nextjs:nodejs ./public/items
+RUN chmod -R 775 ./public/items
 
 USER nextjs
 
