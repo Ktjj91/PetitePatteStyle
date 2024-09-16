@@ -43,6 +43,11 @@ export default function Navigation({session}: NavigationProps) {
     const incrementQuantity = useCartProduct.use.incrementQuantity();
     const removeCart = useCartProduct.use.removeFromCart();
     const onPayment = async () => {
+        if (!session || !session.user) {
+            console.error("Utilisateur non authentifié");
+            return;
+        }
+
         try {
             const response = await fetch(dns, {
                 method: "POST",

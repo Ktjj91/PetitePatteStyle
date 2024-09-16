@@ -18,7 +18,6 @@ export async function generateMetadata(
     parent: ResolvingMetadata
 ): Promise<Metadata> {
     const id = params.id;
-
     const response = await fetch(dns(id));
     const {product} = await response.json();
 
@@ -30,7 +29,7 @@ export async function generateMetadata(
 
 
 export default  async function Page({params}: { params: { id: string } }) {
-    const response = await fetch(`${process.env.DNS}/api/product/${params.id}`);
+    const response = await fetch(dns(params.id));
     const {product} = await response.json();
     return (
        <>

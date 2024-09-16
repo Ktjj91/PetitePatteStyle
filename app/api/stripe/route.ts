@@ -58,7 +58,7 @@ export const POST = auth(async function POST(request: NextRequest) {
                     totalAmount,
                     currency: "eur",
                     paymentStatus: "",
-                    userId: data.userId,
+                    userId: Number(data.userId),
                     items: {
                         create: items.map((item: any) => ({
                             name: item.name,
